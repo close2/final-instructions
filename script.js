@@ -47,19 +47,6 @@ async function handleImportInstructions() {
     document.getElementById('markdownInput').value = await fetchAndDecryptInstructions(decryptionKey);
 }
 
-function initializeApp() {
-    if (window.location.hash === '#admin') {
-        document.getElementById('adminSection').style.display = 'block';
-    }
-    
-    document.getElementById('generateButton').addEventListener('click', handleGenerateClick);
-    //document.getElementById('submitButton').addEventListener('click', handlePasswordSubmit);
-    document.getElementById('saveButton').addEventListener('click', handleSaveInstructions);
-    document.getElementById('importButton').addEventListener('click', handleImportInstructions);
-
-    document.getElementById('requiredShares').textContent = REQUIRED_SHARES;
-}
-
 function handleGenerateClick() {
     const numShares = parseInt(document.getElementById('numShares').value);
     const threshold = parseInt(document.getElementById('threshold').value);
@@ -68,6 +55,53 @@ function handleGenerateClick() {
     
     document.getElementById('sharesList').textContent = shares.join('\n');
     document.getElementById('masterKey').textContent = masterKey;
+}
+
+
+function displayDecryptedContent(decryptedText) {
+    const converter = new showdown.Converter();
+    const html = converter.makeHtml(decryptedText);
+    
+    document.getElementById('passwordForm').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+    document.getElementById('content').innerHTML = html;
+}
+
+async function handlePasswordSubmit(passwordManager) {
+    const password = document.getElementById('passwordInput').value;
+    if (!password) return;
+
+    passwordManager.submittedPasswords.push(password);
+    document.getElementById('passwordCount').textContent = passwordManager.submittedPasswords.length;
+    document.getElementById('passwordInput').value = '';
+
+    if (passwordManager.submittedPasswords.length >= passwordManager.requiredShares) {
+        const decryptionKey = secrets.combine(passwordManager.submittedPasswords);
+        const decrypted = await fetchAndDecryptInstructions(decryptionKey);
+        displayDecryptedContent(decrypted);
+    }
+}
+
+
+function initializeApp() {
+    if (window.location.hash === '#admin') {
+        document.getElementById('adminSection').style.display = 'block';
+    }
+    
+    const passwordManager = {
+        shares: [],
+        requiredShares: REQUIRED_SHARES,
+        submittedPasswords: []
+    };
+
+    document.getElementById('submitButton').addEventListener('click', () => handlePasswordSubmit(passwordManager));
+
+    document.getElementById('generateButton').addEventListener('click', handleGenerateClick);
+    document.getElementById('saveButton').addEventListener('click', handleSaveInstructions);
+    document.getElementById('importButton').addEventListener('click', handleImportInstructions);
+
+    document.getElementById('threshold').value = REQUIRED_SHARES;
+    document.getElementById('requiredShares').textContent = REQUIRED_SHARES;
 }
 
 
