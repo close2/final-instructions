@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Final Instructions</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/secrets.js-grempe@2.0.0/secrets.min.js"></script>
@@ -18,7 +19,7 @@
             <input disabled type="number" id="threshold" value="3">
             <button id="generateButton">Generate Keys</button>
         </div>
-        <div id="generatedContent">
+        <div id="generatedContent" style="display: none;">
             <h4>Individual Shares:</h4>
             <pre id="sharesList"></pre>
             <h4>Master Key (for editing):</h4>
@@ -34,10 +35,11 @@
     </div>
     <div id="userSection">
         <h1>Final Instructions</h1>
-        <div id="passwordForm">
+        <div id="passwordForm" class="password-container">
             <input type="password" id="passwordInput" placeholder="Enter your password">
             <button id="submitButton">Submit Password</button>
-            <p>Passwords submitted: <span id="passwordCount">0</span> / <span id="requiredShares">0</span></p>
+            <div id="errorMessage" class="error-message"></div>
+            <div id="passwordProgress" class="password-progress"></div>
         </div>
         <div id="content" style="display: none;"></div>
     </div>

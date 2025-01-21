@@ -1,0 +1,112 @@
+:root {
+    --primary-color: #ffffff;
+    --secondary-color: #f5f6fa;
+    --accent-color: #3498db;
+    --success-color: #2ecc71;
+    --error-color: #e74c3c;
+    --text-color: #2c3e50;
+    --background-color: #ecf0f1;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1, h2 {
+    color: var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 10px;
+}
+
+input[type="password"], input[type="number"] {
+    background: var(--secondary-color);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    color: var(--text-color);
+    margin: 5px 0;
+    width: 100%;
+    max-width: 300px;
+}
+
+button {
+    background: var(--accent-color);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin: 5px;
+}
+
+button:hover {
+    background: #2980b9;
+}
+
+.password-container {
+    background: var(--secondary-color);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.password-progress {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.password-slot {
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--accent-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-slot.filled {
+    background: var(--success-color);
+}
+
+.error-message {
+    color: var(--error-color);
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+
+#adminSection {
+    background: var(--secondary-color);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+#content {
+    background: var(--secondary-color);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.editor-toolbar {
+    background-color: var(--secondary-color) !important;
+}
+
+.CodeMirror {
+    background-color: var(--secondary-color) !important;
+    color: var(--text-color) !important;
+}

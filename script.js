@@ -53,6 +53,7 @@ function handleGenerateClick() {
     
     const { shares, masterKey } = generateKeys(numShares, threshold);
     
+    document.getElementById('generatedContent').style.display = 'block';
     document.getElementById('sharesList').textContent = shares.join('\n');
     document.getElementById('masterKey').textContent = masterKey;
 }
@@ -67,19 +68,54 @@ function displayDecryptedContent(decryptedText) {
     document.getElementById('content').innerHTML = html;
 }
 
-async function handlePasswordSubmit(passwordManager) {
+function validatePassword(password) {
+    const passwordRegex = /^8\d{2}.{96}$/;
+    return passwordRegex.test(password);
+}
+
+function handlePasswordSubmit(passwordManager) {
     const password = document.getElementById('passwordInput').value;
     if (!password) return;
 
+    if (!validatePassword(password)) {
+        showError('Invalid password format');
+        return;
+    }
+
+    if (passwordManager.submittedPasswords.includes(password)) {
+        showError('This password has already been used');
+        return;
+    }
+
     passwordManager.submittedPasswords.push(password);
-    document.getElementById('passwordCount').textContent = passwordManager.submittedPasswords.length;
+    updatePasswordDisplay(passwordManager);
     document.getElementById('passwordInput').value = '';
 
     if (passwordManager.submittedPasswords.length >= passwordManager.requiredShares) {
         const decryptionKey = secrets.combine(passwordManager.submittedPasswords);
-        const decrypted = await fetchAndDecryptInstructions(decryptionKey);
-        displayDecryptedContent(decrypted);
+        fetchAndDecryptInstructions(decryptionKey)
+          .then(displayDecryptedContent);
     }
+}
+
+function updatePasswordDisplay(passwordManager) {
+    const progressContainer = document.getElementById('passwordProgress');
+    progressContainer.innerHTML = '';
+    
+    for (let i = 0; i < passwordManager.requiredShares; i++) {
+        const slot = document.createElement('div');
+        slot.className = `password-slot ${i < passwordManager.submittedPasswords.length ? 'filled' : ''}`;
+        progressContainer.appendChild(slot);
+    }
+}
+
+function showError(message) {
+    const errorDiv = document.getElementById('errorMessage');
+    errorDiv.textContent = message;
+    errorDiv.style.opacity = 1;
+    setTimeout(() => {
+        errorDiv.style.opacity = 0;
+    }, 3000);
 }
 
 function convertImageToBase64(blob) {
@@ -165,8 +201,6 @@ function initializeApp() {
     };
 
     document.getElementById('submitButton').addEventListener('click', () => handlePasswordSubmit(passwordManager));
-
-    document.getElementById('requiredShares').textContent = REQUIRED_SHARES;
 }
 
 
