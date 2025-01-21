@@ -69,7 +69,7 @@ function displayDecryptedContent(decryptedText) {
 }
 
 function validatePassword(password) {
-    const passwordRegex = /^8\d{2}[0-9a-fA-F]{96}$/;
+    const passwordRegex = /^8[0-9a-fA-F]{98}$/;
     return passwordRegex.test(password);
 }
 
