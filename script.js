@@ -1,32 +1,39 @@
-// Configuration
-const requiredShares = 3;
+import { encryptMessage, decryptMessage } from './crypto.js';
+import { REQUIRED_SHARES, SECRET_SIZE_BITS } from './config.js';
+
+
+
 let shares = [];
 let encryptedContent = null;
-
-// Initialize
-document.getElementById('requiredShares').textContent = requiredShares;
 const submittedPasswords = [];
 
-// Show admin panel with special URL parameter
-if (window.location.hash === '#admin') {
-    document.getElementById('adminSection').style.display = 'block';
+
+function generateKeys(numShares, threshold) {
+    const key = secrets.random(SECRET_SIZE_BITS);
+    const shares = secrets.share(key, numShares, threshold);
+    const masterKey = shares.slice(0, threshold).join('-');
+    
+    return { shares, masterKey };
 }
 
-// Fetch encrypted content on load
-fetch('content.blob')
-    .then(response => response.text())
-    .then(content => {
-        encryptedContent = content;
-    })
-    .catch(error => console.error('Error loading content:', error));
+function initializeApp() {
+    if (window.location.hash === '#admin') {
+        document.getElementById('adminSection').style.display = 'block';
+    }
+    
+    // Add event listeners
+    document.getElementById('generateButton').addEventListener('click', handleGenerateClick);
+    document.getElementById('submitButton').addEventListener('click', handlePasswordSubmit);
 
-function generateKeys() {
+    document.getElementById('requiredShares').textContent = REQUIRED_SHARES;
+}
+
+
+function handleGenerateClick() {
     const numShares = parseInt(document.getElementById('numShares').value);
     const threshold = parseInt(document.getElementById('threshold').value);
     
-    const key = secrets.random(128);
-    shares = secrets.share(key, numShares, threshold);
-    const masterKey = shares.slice(0, threshold).join('-');
+    const { shares, masterKey } = generateKeys(numShares, threshold);
     
     document.getElementById('sharesList').textContent = shares.join('\n');
     document.getElementById('masterKey').textContent = masterKey;
@@ -36,7 +43,7 @@ function generateAndEncrypt() {
     const markdown = document.getElementById('markdownEditor').value;
     
     // Generate keys
-    generateKeys();
+    handleGenerateClick();
     
     // Encrypt content
     const encrypted = btoa(markdown); // Replace with proper encryption
@@ -58,6 +65,12 @@ function generateAndEncrypt() {
 }
 
 function submitPassword() {
+    if (handlePasswordSubmit(shares, requiredShares, submittedPasswords)) {
+        decryptAndShow();
+    }
+}
+
+function handlePasswordSubmit(shares, requiredShares, submittedPasswords) {
     const password = document.getElementById('passwordInput').value;
     if (!password) return;
 
@@ -67,11 +80,12 @@ function submitPassword() {
         document.getElementById('passwordInput').value = '';
 
         if (submittedPasswords.length >= requiredShares) {
-            decryptAndShow();
+            return true;
         }
     } else {
         alert('Invalid password');
     }
+    return false;
 }
 
 function decryptAndShow() {
@@ -86,6 +100,4 @@ function decryptAndShow() {
     document.getElementById('content').innerHTML = html;
 }
 
-function decryptMessage(encrypted, key) {
-    return atob(encrypted);
-}
+export { generateKeys, initializeApp, handleGenerateClick, handlePasswordSubmit }

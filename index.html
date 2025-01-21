@@ -4,6 +4,7 @@
     <title>Final Instructions</title>
     <script src="https://cdn.jsdelivr.net/npm/secrets.js-grempe@2.0.0/secrets.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+    <script type="module" src="script.js"></script>
 </head>
 <body>
     <div id="adminSection" style="display: none;">
@@ -13,7 +14,7 @@
             <input type="number" id="numShares" value="5">
             <label>Required Shares:</label>
             <input type="number" id="threshold" value="3">
-            <button onclick="generateKeys()">Generate Keys</button>
+            <button id="generateButton">Generate Keys</button>
         </div>
         <div id="generatedContent">
             <h4>Individual Shares:</h4>
@@ -27,11 +28,15 @@
         <h1>Final Instructions</h1>
         <div id="passwordForm">
             <input type="password" id="passwordInput" placeholder="Enter your password">
-            <button onclick="submitPassword()">Submit Password</button>
+            <button id="submitButton">Submit Password</button>
             <p>Passwords submitted: <span id="passwordCount">0</span> / <span id="requiredShares">0</span></p>
         </div>
         <div id="content" style="display: none;"></div>
     </div>
-    <script src="script.js"></script>
 </body>
 </html>
+
+<script type="module">
+    import { initializeApp } from './script.js';
+    window.onload = initializeApp;
+</script>
