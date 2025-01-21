@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Final Instructions</title>
+    <script src="https://cdn.jsdelivr.net/npm/secrets.js-grempe@2.0.0/secrets.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+</head>
+<body>
+    <div id="adminSection" style="display: none;">
+        <h2>Key Management</h2>
+        <div>
+            <label>Number of Shares:</label>
+            <input type="number" id="numShares" value="5">
+            <label>Required Shares:</label>
+            <input type="number" id="threshold" value="3">
+            <button onclick="generateKeys()">Generate Keys</button>
+        </div>
+        <div id="generatedContent">
+            <h4>Individual Shares:</h4>
+            <pre id="sharesList"></pre>
+            <h4>Master Key (for editing):</h4>
+            <pre id="masterKey"></pre>
+        </div>
+    </div>
+
+    <div id="userSection">
+        <h1>Final Instructions</h1>
+        <div id="passwordForm">
+            <input type="password" id="passwordInput" placeholder="Enter your password">
+            <button onclick="submitPassword()">Submit Password</button>
+            <p>Passwords submitted: <span id="passwordCount">0</span> / <span id="requiredShares">0</span></p>
+        </div>
+        <div id="content" style="display: none;"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
