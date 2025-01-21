@@ -82,19 +82,72 @@ async function handlePasswordSubmit(passwordManager) {
     }
 }
 
+function convertImageToBase64(blob) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+    });
+}
+
+function handleSimpleMDEImagePaste(editor) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    
+    input.onchange = async (e) => {
+        const file = e.target.files[0];
+        const base64 = await convertImageToBase64(file);
+        const imageMarkdown = `![image](${base64})`;
+        editor.codemirror.replaceSelection(imageMarkdown);
+    };
+    
+    input.click();
+}
+
+function initializeSimpleMDE(simpleMdeId) {
+    const simplemde = new SimpleMDE({ 
+        element: document.getElementById(simpleMdeId),
+        spellChecker: false,
+        toolbar: [
+            "bold", "italic", "heading", "|",
+            "quote", "unordered-list", "ordered-list", "|",
+            "link", 
+            {
+                name: "image",
+                action: handleSimpleMDEImagePaste,
+                className: "fa fa-picture-o",
+                title: "Insert Image (Ctrl+V)",
+            },
+            "|",
+            "preview", "side-by-side", "fullscreen"
+        ]
+    });
+    
+
+    // Handle paste events
+    simplemde.codemirror.on("paste", async (cm, e) => {
+        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        
+        for (const item of items) {
+            if (item.type.indexOf("image") === 0) {
+                e.preventDefault();
+                const blob = item.getAsFile();
+                const base64 = await convertImageToBase64(blob);
+                const cursor = cm.getCursor();
+                cm.replaceRange(`![image](${base64})`, cursor);
+            }
+        }
+    });
+
+    return simplemde;
+}
 
 function initializeApp() {
     if (window.location.hash === '#admin') {
         document.getElementById('adminSection').style.display = 'block';
 
-        const simplemde = new SimpleMDE({
-            element: document.getElementById("markdownEditor"),
-            spellChecker: false,
-            autosave: {
-                enabled: true,
-                uniqueId: "instructions"
-            }
-        });
+        const simplemde = initializeSimpleMDE("markdownEditor");
 
         document.getElementById('saveButton').addEventListener('click',
             () => handleSaveInstructions(simplemde));
