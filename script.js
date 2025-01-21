@@ -10,11 +10,10 @@ function generateKeys(numShares, threshold) {
     return { shares, masterKey };
 }
 
-function handleSaveInstructions() {
+function handleSaveInstructions(simplemde) {
     const masterPassword = document.getElementById('editMasterPassword').value;
-    const markdownText = document.getElementById('markdownInput').value;
+    const markdownText = simplemde.value();
     
-    // Split master password into shares and combine them
     const shares = masterPassword.split('-');
     const encryptionKey = secrets.combine(shares);
     
@@ -31,7 +30,6 @@ function handleSaveInstructions() {
             URL.revokeObjectURL(url);
         });
 }
-
 async function fetchAndDecryptInstructions(decryptionKey) {
     const response = await fetch('instructions.encrypted.txt');
     const encrypted = await response.text();
@@ -39,12 +37,14 @@ async function fetchAndDecryptInstructions(decryptionKey) {
     return decrypted;
 }
 
-async function handleImportInstructions() {
+async function handleImportInstructions(simplemde) {
     const masterPassword = document.getElementById('editMasterPassword').value;
     const shares = masterPassword.split('-');
     const decryptionKey = secrets.combine(shares);
 
-    document.getElementById('markdownInput').value = await fetchAndDecryptInstructions(decryptionKey);
+    const decrypted = await fetchAndDecryptInstructions(decryptionKey);
+    
+    simplemde.value(decrypted);
 }
 
 function handleGenerateClick() {
@@ -86,8 +86,25 @@ async function handlePasswordSubmit(passwordManager) {
 function initializeApp() {
     if (window.location.hash === '#admin') {
         document.getElementById('adminSection').style.display = 'block';
+
+        const simplemde = new SimpleMDE({
+            element: document.getElementById("markdownEditor"),
+            spellChecker: false,
+            autosave: {
+                enabled: true,
+                uniqueId: "instructions"
+            }
+        });
+
+        document.getElementById('saveButton').addEventListener('click',
+            () => handleSaveInstructions(simplemde));
+        document.getElementById('importButton').addEventListener('click',
+            () => handleImportInstructions(simplemde));
+        document.getElementById('generateButton').addEventListener('click', handleGenerateClick);
+
+        document.getElementById('threshold').value = REQUIRED_SHARES;
     }
-    
+
     const passwordManager = {
         shares: [],
         requiredShares: REQUIRED_SHARES,
@@ -96,11 +113,6 @@ function initializeApp() {
 
     document.getElementById('submitButton').addEventListener('click', () => handlePasswordSubmit(passwordManager));
 
-    document.getElementById('generateButton').addEventListener('click', handleGenerateClick);
-    document.getElementById('saveButton').addEventListener('click', handleSaveInstructions);
-    document.getElementById('importButton').addEventListener('click', handleImportInstructions);
-
-    document.getElementById('threshold').value = REQUIRED_SHARES;
     document.getElementById('requiredShares').textContent = REQUIRED_SHARES;
 }
 

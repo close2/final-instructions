@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Final Instructions</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/secrets.js-grempe@2.0.0/secrets.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
     <script type="module" src="script.js"></script>
@@ -26,7 +28,7 @@
         <div id="editSection">
             <input type="password" id="editMasterPassword" placeholder="Enter master password">
             <button id="importButton">Import</button>
-            <textarea id="markdownInput" rows="10" cols="50" placeholder="Enter your markdown text here"></textarea>
+            <textarea id="markdownEditor"></textarea>
             <button id="saveButton">Save</button>
         </div>
     </div>
@@ -44,5 +46,5 @@
 
 <script type="module">
     import { initializeApp } from './script.js';
-    window.onload = initializeApp;
+    initializeApp();
 </script>
