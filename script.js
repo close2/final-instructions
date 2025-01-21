@@ -69,7 +69,7 @@ function displayDecryptedContent(decryptedText) {
 }
 
 function validatePassword(password) {
-    const passwordRegex = /^8\d{2}.{96}$/;
+    const passwordRegex = /^8\d{2}[0-9a-fA-F]{96}$/;
     return passwordRegex.test(password);
 }
 
@@ -204,4 +204,4 @@ function initializeApp() {
 }
 
 
-export { initializeApp }
+export { initializeApp, generateKeys, validatePassword }
