@@ -10,7 +10,7 @@ function generateKeys(numShares, threshold) {
     return { shares, masterKey };
 }
 
-function handleSaveInstructions(simplemde) {
+function handleSaveInstructions(simplemde, shouldEmbed = false) {
     const masterPassword = document.getElementById('editMasterPassword').value;
     const markdownText = simplemde.value();
     
@@ -19,20 +19,28 @@ function handleSaveInstructions(simplemde) {
     
     encryptMessage(markdownText, encryptionKey)
         .then(encrypted => {
-            const blob = new Blob([encrypted], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'instructions.encrypted.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            if (shouldEmbed) {
+                embedInstructions(encrypted);
+            } else {
+                const blob = new Blob([encrypted], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'instructions.encrypted.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
         });
 }
+
 async function fetchAndDecryptInstructions(decryptionKey) {
-    const response = await fetch('instructions.encrypted.txt');
-    const encrypted = await response.text();
+    let encrypted = getEmbeddedInstructions();
+    if (!encrypted) {
+        const response = await fetch('instructions.encrypted.txt');
+        encrypted = await response.text();    
+    }
     const decrypted = await decryptMessage(encrypted, decryptionKey);
     return decrypted;
 }
@@ -179,21 +187,51 @@ function initializeSimpleMDE(simpleMdeId) {
     return simplemde;
 }
 
+let originalPage; // Make this a module-level variable so we can access it throughout
+
+function storePageContent() {
+    originalPage = document.documentElement.outerHTML;
+}
+
+function embedInstructions(encryptedContent) {
+    const modifiedPage = originalPage.replace(
+        '</body>',
+        `<script id="encrypted-instructions" type="text/plain">${encryptedContent}</script></body>`
+    );
+    // Create a Blob with the modified content
+    const blob = new Blob([modifiedPage], {type: 'text/html'});
+    // Create download link
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'index.html';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function getEmbeddedInstructions() {
+    const scriptTag = document.querySelector('#encrypted-instructions');
+    return scriptTag ? scriptTag.textContent : null;
+}
+
 function initializeApp() {
+    storePageContent();
+
     if (window.location.hash === '#admin') {
         document.getElementById('adminSection').style.display = 'block';
 
         const simplemde = initializeSimpleMDE("markdownEditor");
 
         document.getElementById('saveButton').addEventListener('click',
-            () => handleSaveInstructions(simplemde));
+            () => handleSaveInstructions(simplemde, false));
+        document.getElementById('downloadPageButton').addEventListener('click',
+            () => handleSaveInstructions(simplemde, true));
         document.getElementById('importButton').addEventListener('click',
             () => handleImportInstructions(simplemde));
         document.getElementById('generateButton').addEventListener('click', handleGenerateClick);
 
         document.getElementById('threshold').value = REQUIRED_SHARES;
     }
-
     const passwordManager = {
         shares: [],
         requiredShares: REQUIRED_SHARES,
@@ -202,6 +240,5 @@ function initializeApp() {
 
     document.getElementById('submitButton').addEventListener('click', () => handlePasswordSubmit(passwordManager));
 }
-
 
 export { initializeApp, generateKeys, validatePassword }

@@ -31,7 +31,8 @@
             <input type="password" id="editMasterPassword" placeholder="Enter master password">
             <button id="importButton">Import</button>
             <textarea id="markdownEditor"></textarea>
-            <button id="saveButton">Save</button>
+            <button id="saveButton" class="btn btn-primary">Save Instructions</button>
+            <button id="downloadPageButton" class="btn btn-primary">Download Complete Page</button>
         </div>
     </div>
     <div id="userSection">
@@ -44,10 +45,9 @@
         </div>
         <div id="content" style="display: none;"></div>
     </div>
+    <script type="module">
+        import { initializeApp } from './script.js';
+        initializeApp();
+    </script>
 </body>
 </html>
-
-<script type="module">
-    import { initializeApp } from './script.js';
-    initializeApp();
-</script>
