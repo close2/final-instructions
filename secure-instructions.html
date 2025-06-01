@@ -754,6 +754,23 @@
             showEditorStep(1);
         }
 
+        function populateEditor() {
+            if (!appData.workingContent) return;
+            
+            // Populate basic information
+            document.getElementById('edit-name').value = appData.workingContent.name || '';
+            document.getElementById('edit-description').value = appData.workingContent.description || '';
+            document.getElementById('edit-total-shares').value = appData.workingContent.totalShares || 5;
+            document.getElementById('edit-required-shares').value = appData.workingContent.requiredShares || 3;
+            document.getElementById('edit-text').value = appData.workingContent.text || '';
+            
+            // Clear file input and preview existing files
+            document.getElementById('file-input').value = '';
+            updateFilePreview(appData.workingContent.files || []);
+            
+            ui.clearMessages();
+        }
+
         async function editContent(contentId) {
             const content = appData.contents.find(c => c.id === contentId);
             if (!content) return;
@@ -791,20 +808,33 @@
 
         function updateFilePreview(existingFiles = []) {
             const preview = document.getElementById('file-preview');
+            preview.innerHTML = '';
             
             if (existingFiles.length > 0) {
                 const existingFilesList = document.createElement('div');
                 existingFilesList.innerHTML = '<h4>Existing Files:</h4>';
                 
-                existingFiles.forEach(file => {
+                existingFiles.forEach((file, index) => {
                     const fileItem = document.createElement('div');
-                    fileItem.innerHTML = `• ${escapeHtml(file.name)} (${file.type || 'unknown'}) - <small>existing</small>`;
+                    fileItem.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid #eee;';
+                    fileItem.innerHTML = `
+                        <span>• ${escapeHtml(file.name)} (${file.type || 'unknown'}) - <small>existing</small></span>
+                        <button type="button" class="btn btn-danger" style="padding: 4px 8px; font-size: 12px;" onclick="removeExistingFile(${index})">Remove</button>
+                    `;
                     existingFilesList.appendChild(fileItem);
                 });
                 
                 preview.appendChild(existingFilesList);
             }
         }
+
+        function removeExistingFile(index) {
+            if (appData.workingContent && appData.workingContent.files) {
+                appData.workingContent.files.splice(index, 1);
+                updateFilePreview(appData.workingContent.files);
+            }
+        }
+
 
         function deleteContent(contentId) {
             if (confirm('Are you sure you want to delete this content?')) {
@@ -1063,6 +1093,7 @@ ${indentedJson}
         window.saveContent = saveContent;
         window.cancelEdit = cancelEdit;
         window.exitAdmin = exitAdmin;
+        window.removeExistingFile = removeExistingFile;
     </script>
 </body>
 </html>
