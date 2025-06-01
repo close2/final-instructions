@@ -290,7 +290,7 @@
             contents: [],
             currentContent: null,
             isAdmin: false,
-            workingContent: null  // Current content being created/edited
+            editingId: null
         };
 
         // Store initial HTML for clean exports
@@ -510,9 +510,19 @@
         };
 
         // Initialize application
-        function init() {
-            // Capture initial HTML before any modifications
-            initialHTML = document.documentElement.outerHTML;
+        async function init() {
+            // Fetch the original file to preserve formatting
+            try {
+                const response = await fetch(window.location.href);
+                initialHTML = await response.text();
+                
+                // Remove any existing embedded data from the template
+                initialHTML = initialHTML.replace(/<script[^>]*id="embedded-data"[^>]*>[\s\S]*?<\/script>/i, '');
+            } catch (e) {
+                console.warn('Could not fetch original HTML, using DOM fallback');
+                // Fallback to DOM method if fetch fails
+                initialHTML = document.documentElement.outerHTML;
+            }
             
             loadData();
             
@@ -537,6 +547,8 @@
                     
                     // Clean the initial HTML by removing the embedded data
                     // so we start with a clean template for future exports
+                    // This shouldn't be necessary as we have already removed the embedded-data when fetching the original html,
+                    // but better safe than sorry.
                     initialHTML = initialHTML.replace(/<script[^>]*id="embedded-data"[^>]*>[\s\S]*?<\/script>/i, '');
                     return;
                 }
@@ -974,20 +986,26 @@
 
         // Generate updated file with embedded data
         function generateUpdatedFile() {
-            // Use the initial HTML instead of current state
+            // Use the fetched HTML which preserves formatting
             let htmlContent = initialHTML;
             
             // Remove existing embedded data if present
             htmlContent = htmlContent.replace(/<script[^>]*id="embedded-data"[^>]*>[\s\S]*?<\/script>/i, '');
             
-            // Create new embedded data script
-            const dataScript = `
-                <script type="application/json" id="embedded-data">
-${JSON.stringify(appData.contents, null, 8)}
-                <\/script>`;
+            // Create new embedded data script with proper indentation
+            const indentedJson = JSON.stringify(appData.contents, null, 4)
+                .split('\n')
+                .map(line => line ? '        ' + line : line) // Add 8 spaces for proper HTML indentation
+                .join('\n');
+            
+            // Do not inline the following variable!  Otherwise we will remove it when trying to remove the "real" embedded-data
+            const embeddedDataId = 'embedded-data';
+            const dataScript = `    <script type="application/json" id="${embeddedDataId}">
+${indentedJson}
+    <\/script>`;
             
             // Insert data script before the closing head tag
-            const updatedHtml = htmlContent.replace('</head>', dataScript + '\n    </head>');
+            const updatedHtml = htmlContent.replace('</head>', dataScript + '\n</head>');
             
             // Create downloadable file
             const blob = new Blob([updatedHtml], { type: 'text/html' });
