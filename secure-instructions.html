@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Instructions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 16px;
+        }
+
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .progress {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .content-item {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .content-item h3 {
+            margin-bottom: 8px;
+        }
+
+        .content-meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .file-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .file-list a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .file-list a:hover {
+            text-decoration: underline;
+        }
+
+        .password-input {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .password-input input {
+            flex: 1;
+        }
+
+        .admin-nav {
+            margin-bottom: 24px;
+        }
+
+        .admin-nav button {
+            margin-right: 8px;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Main View Templates -->
+        <div id="main-view">
+            <div class="card">
+                <h1 data-i18n="app.title">Secure Instructions</h1>
+                <p data-i18n="app.description">This application allows you to access encrypted content that requires multiple passwords to decrypt. Select a content item below and follow the instructions.</p>
+            </div>
+
+            <div class="card">
+                <h2 data-i18n="contents.title">Available Contents</h2>
+                <div id="content-list"></div>
+            </div>
+        </div>
+
+        <!-- Decryption View -->
+        <div id="decryption-view" class="hidden">
+            <div class="card">
+                <button class="btn btn-secondary" onclick="showMainView()" data-i18n="common.back">Back</button>
+                <h2 id="decrypt-title"></h2>
+                <p id="decrypt-description"></p>
+                
+                <div id="password-inputs"></div>
+                <button class="btn" onclick="attemptDecryption()" data-i18n="decrypt.button">Decrypt Content</button>
+            </div>
+        </div>
+
+        <!-- Decrypted Content View -->
+        <div id="content-view" class="hidden">
+            <div class="card">
+                <button class="btn btn-secondary" onclick="showMainView()" data-i18n="common.back">Back</button>
+                <h2 id="content-title"></h2>
+                <div id="content-text"></div>
+                <h3 data-i18n="files.title">Files</h3>
+                <ul id="content-files" class="file-list"></ul>
+            </div>
+        </div>
+
+        <!-- Admin View -->
+        <div id="admin-view" class="hidden">
+            <div class="card">
+                <h1 data-i18n="admin.title">Admin Interface</h1>
+                <div class="admin-nav">
+                    <button class="btn" onclick="showAdminList()" data-i18n="admin.listContents">List Contents</button>
+                    <button class="btn" onclick="showCreateContent()" data-i18n="admin.createContent">Create Content</button>
+                    <button class="btn btn-secondary" onclick="exitAdmin()" data-i18n="admin.exit">Exit Admin</button>
+                </div>
+            </div>
+
+            <!-- Admin Content List -->
+            <div id="admin-list" class="card">
+                <h2 data-i18n="admin.contentList">Content Management</h2>
+                <div id="admin-content-list"></div>
+            </div>
+
+            <!-- Create/Edit Content -->
+            <div id="admin-editor" class="card hidden">
+                <h2 id="editor-title" data-i18n="admin.createNew">Create New Content</h2>
+                <div id="editor-messages"></div>
+                
+                <div id="step1" class="editor-step">
+                    <h3 data-i18n="admin.step1">Step 1: Basic Information</h3>
+                    <div class="form-group">
+                        <label data-i18n="admin.contentName">Content Name:</label>
+                        <input type="text" id="edit-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="admin.description">Description:</label>
+                        <textarea id="edit-description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="admin.totalShares">Total Number of Password Shares:</label>
+                        <input type="number" id="edit-total-shares" min="2" max="10" value="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="admin.requiredShares">Required Shares to Decrypt:</label>
+                        <input type="number" id="edit-required-shares" min="2" max="10" value="3" required>
+                    </div>
+                    <button class="btn" onclick="generateShares()" data-i18n="admin.generateShares">Generate Shares</button>
+                </div>
+
+                <div id="step2" class="editor-step hidden">
+                    <h3 data-i18n="admin.step2">Step 2: Generated Shares</h3>
+                    <div class="form-group">
+                        <label data-i18n="admin.masterKey">Master Key (save this securely):</label>
+                        <textarea id="master-key" readonly></textarea>
+                    </div>
+                    <div id="shares-list"></div>
+                    <button class="btn" onclick="proceedToContent()" data-i18n="admin.proceedToContent">Proceed to Content</button>
+                </div>
+
+                <div id="step3" class="editor-step hidden">
+                    <h3 data-i18n="admin.step3">Step 3: Content</h3>
+                    <div class="form-group">
+                        <label data-i18n="admin.instructionText">Instruction Text (encrypted):</label>
+                        <textarea id="edit-text"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="admin.uploadFiles">Upload Files:</label>
+                        <input type="file" id="file-input" multiple>
+                    </div>
+                    <div id="file-preview"></div>
+                    <button class="btn" onclick="saveContent()" data-i18n="admin.save">Save Content</button>
+                    <button class="btn btn-secondary" onclick="cancelEdit()" data-i18n="common.cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TODO: Inline secrets.js library here for complete self-containment -->
+    <script src="https://cdn.jsdelivr.net/npm/secrets.js-grempe@2.0.0/secrets.min.js"></script>
+    
+    <script>
+        // Application State
+        let appData = {
+            contents: [],
+            currentContent: null,
+            isAdmin: false,
+            workingContent: null  // Current content being created/edited
+        };
+
+        // Store initial HTML for clean exports
+        let initialHTML = '';
+
+        // Internationalization
+        const i18n = {
+            en: {
+                'app.title': 'Secure Instructions',
+                'app.description': 'This application allows you to access encrypted content that requires multiple passwords to decrypt. Select a content item below and follow the instructions.',
+                'contents.title': 'Available Contents',
+                'decrypt.button': 'Decrypt Content',
+                'files.title': 'Files',
+                'common.back': 'Back',
+                'common.cancel': 'Cancel',
+                'admin.title': 'Admin Interface',
+                'admin.listContents': 'List Contents',
+                'admin.createContent': 'Create Content',
+                'admin.exit': 'Exit Admin',
+                'admin.contentList': 'Content Management',
+                'admin.createNew': 'Create New Content',
+                'admin.step1': 'Step 1: Basic Information',
+                'admin.contentName': 'Content Name:',
+                'admin.description': 'Description:',
+                'admin.totalShares': 'Total Number of Password Shares:',
+                'admin.requiredShares': 'Required Shares to Decrypt:',
+                'admin.generateShares': 'Generate Shares',
+                'admin.step2': 'Step 2: Generated Shares',
+                'admin.masterKey': 'Master Key (save this securely):',
+                'admin.proceedToContent': 'Proceed to Content',
+                'admin.step3': 'Step 3: Content',
+                'admin.instructionText': 'Instruction Text (encrypted):',
+                'admin.uploadFiles': 'Upload Files:',
+                'admin.save': 'Save Content'
+            }
+        };
+
+        // Crypto utilities
+        const crypto = {
+            // Convert hex string to bytes
+            hexToBytes(hex) {
+                const bytes = new Uint8Array(hex.length / 2);
+                for (let i = 0; i < hex.length; i += 2) {
+                    bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+                }
+                return bytes;
+            },
+
+            // Convert bytes to hex string
+            bytesToHex(bytes) {
+                return Array.from(bytes)
+                    .map(b => b.toString(16).padStart(2, '0'))
+                    .join('');
+            },
+
+            // Convert bytes to base64
+            bytesToBase64(bytes) {
+                return btoa(String.fromCharCode(...bytes));
+            },
+
+            // Convert base64 to bytes
+            base64ToBytes(base64) {
+                return new Uint8Array(atob(base64).split('').map(c => c.charCodeAt(0)));
+            },
+
+            // Generate random bytes
+            randomBytes(length) {
+                return window.crypto.getRandomValues(new Uint8Array(length));
+            },
+
+            // Generate AES key
+            async generateKey() {
+                const key = await window.crypto.subtle.generateKey(
+                    { name: 'AES-GCM', length: 256 },
+                    true,
+                    ['encrypt', 'decrypt']
+                );
+                const exported = await window.crypto.subtle.exportKey('raw', key);
+                return new Uint8Array(exported);
+            },
+
+            // Import AES key
+            async importKey(keyBytes) {
+                return await window.crypto.subtle.importKey(
+                    'raw',
+                    keyBytes,
+                    { name: 'AES-GCM' },
+                    false,
+                    ['encrypt', 'decrypt']
+                );
+            },
+
+            // Encrypt data
+            async encrypt(data, key) {
+                const iv = this.randomBytes(12);
+                const cryptoKey = await this.importKey(key);
+                const encrypted = await window.crypto.subtle.encrypt(
+                    { name: 'AES-GCM', iv },
+                    cryptoKey,
+                    data
+                );
+                
+                // Combine IV and encrypted data
+                const result = new Uint8Array(iv.length + encrypted.byteLength);
+                result.set(iv);
+                result.set(new Uint8Array(encrypted), iv.length);
+                return this.bytesToBase64(result);
+            },
+
+            // Decrypt data
+            async decrypt(encryptedBase64, key) {
+                const encryptedData = this.base64ToBytes(encryptedBase64);
+                const iv = encryptedData.slice(0, 12);
+                const ciphertext = encryptedData.slice(12);
+                
+                const cryptoKey = await this.importKey(key);
+                const decrypted = await window.crypto.subtle.decrypt(
+                    { name: 'AES-GCM', iv },
+                    cryptoKey,
+                    ciphertext
+                );
+                
+                return new Uint8Array(decrypted);
+            }
+        };
+
+        // Content management
+        const contentManager = {
+            // Generate Shamir shares
+            generateShares(totalShares, requiredShares) {
+                const key = crypto.randomBytes(32);
+                const keyHex = crypto.bytesToHex(key);
+                const shares = secrets.share(keyHex, totalShares, requiredShares);
+                return {
+                    key: keyHex,
+                    shares: shares
+                };
+            },
+
+            // Combine shares to reconstruct key
+            combineShares(shares) {
+                try {
+                    return secrets.combine(shares);
+                } catch (e) {
+                    throw new Error('Invalid or insufficient shares');
+                }
+            },
+
+            // Encrypt content
+            async encryptContent(content, key) {
+                const data = new TextEncoder().encode(JSON.stringify(content));
+                const keyBytes = crypto.hexToBytes(key);
+                return await crypto.encrypt(data, keyBytes);
+            },
+
+            // Decrypt content
+            async decryptContent(encryptedContent, key) {
+                const keyBytes = crypto.hexToBytes(key);
+                const decryptedData = await crypto.decrypt(encryptedContent, keyBytes);
+                const json = new TextDecoder().decode(decryptedData);
+                return JSON.parse(json);
+            },
+
+            // Convert file to base64
+            async fileToBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            },
+
+            // Create blob URL from base64
+            base64ToBlob(base64, mimeType) {
+                const bytes = crypto.base64ToBytes(base64);
+                return new Blob([bytes], { type: mimeType });
+            }
+        };
+
+        // UI Management
+        const ui = {
+            // Show/hide views
+            showView(viewId) {
+                document.querySelectorAll('#main-view, #decryption-view, #content-view, #admin-view')
+                    .forEach(view => view.classList.add('hidden'));
+                document.getElementById(viewId).classList.remove('hidden');
+            },
+
+            // Show error message
+            showError(message, containerId = 'editor-messages') {
+                const container = document.getElementById(containerId);
+                container.innerHTML = `<div class="error">${message}</div>`;
+            },
+
+            // Show success message
+            showSuccess(message, containerId = 'editor-messages') {
+                const container = document.getElementById(containerId);
+                container.innerHTML = `<div class="success">${message}</div>`;
+            },
+
+            // Clear messages
+            clearMessages(containerId = 'editor-messages') {
+                const container = document.getElementById(containerId);
+                if (container) container.innerHTML = '';
+            },
+
+            // Apply internationalization
+            applyI18n(lang = 'en') {
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (i18n[lang] && i18n[lang][key]) {
+                        element.textContent = i18n[lang][key];
+                    }
+                });
+            }
+        };
+
+        // Initialize application
+        function init() {
+            // Capture initial HTML before any modifications
+            initialHTML = document.documentElement.outerHTML;
+            
+            loadData();
+            
+            // Check if admin mode
+            if (window.location.hash === '#admin') {
+                appData.isAdmin = true;
+                showAdminView();
+            } else {
+                showMainView();
+            }
+            
+            ui.applyI18n();
+        }
+
+        // Load data from embedded script or localStorage
+        function loadData() {
+            try {
+                // Try to load from embedded data first
+                const embeddedData = getEmbeddedData();
+                if (embeddedData) {
+                    appData.contents = embeddedData;
+                    
+                    // Clean the initial HTML by removing the embedded data
+                    // so we start with a clean template for future exports
+                    initialHTML = initialHTML.replace(/<script[^>]*id="embedded-data"[^>]*>[\s\S]*?<\/script>/i, '');
+                    return;
+                }
+                
+                // Fallback to localStorage for development
+                const stored = localStorage.getItem('secureInstructionsData');
+                if (stored) {
+                    appData.contents = JSON.parse(stored);
+                }
+            } catch (e) {
+                console.error('Error loading data:', e);
+                appData.contents = [];
+            }
+        }
+
+        // Save data to localStorage (for development)
+        function saveData() {
+            localStorage.setItem('secureInstructionsData', JSON.stringify(appData.contents));
+        }
+
+        // Get embedded data (looks for embedded script element)
+        function getEmbeddedData() {
+            const dataElement = document.getElementById('embedded-data');
+            if (dataElement) {
+                try {
+                    return JSON.parse(dataElement.textContent);
+                } catch (e) {
+                    console.error('Error parsing embedded data:', e);
+                }
+            }
+            return null;
+        }
+
+        // Main view functions
+        function showMainView() {
+            ui.showView('main-view');
+            renderContentList();
+        }
+
+        function renderContentList() {
+            const container = document.getElementById('content-list');
+            
+            if (appData.contents.length === 0) {
+                container.innerHTML = '<p>No content available.</p>';
+                return;
+            }
+            
+            container.innerHTML = appData.contents.map(content => `
+                <div class="content-item">
+                    <h3>${escapeHtml(content.name)}</h3>
+                    <div class="content-meta">
+                        Requires ${content.requiredShares} of ${content.totalShares} passwords
+                    </div>
+                    <p>${escapeHtml(content.description)}</p>
+                    <button class="btn" onclick="startDecryption('${content.id}')">Access Content</button>
+                </div>
+            `).join('');
+        }
+
+        // Decryption functions
+        function startDecryption(contentId) {
+            const content = appData.contents.find(c => c.id === contentId);
+            if (!content) return;
+            
+            appData.currentContent = content;
+            ui.showView('decryption-view');
+            
+            document.getElementById('decrypt-title').textContent = content.name;
+            document.getElementById('decrypt-description').textContent = content.description;
+            
+            renderPasswordInputs(content.requiredShares);
+        }
+
+        function renderPasswordInputs(requiredShares) {
+            const container = document.getElementById('password-inputs');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < requiredShares; i++) {
+                const div = document.createElement('div');
+                div.className = 'password-input';
+                div.innerHTML = `
+                    <label>Password ${i + 1}:</label>
+                    <input type="password" id="password-${i}" required>
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        async function attemptDecryption() {
+            try {
+                const passwords = [];
+                const requiredShares = appData.currentContent.requiredShares;
+                
+                // Collect passwords
+                for (let i = 0; i < requiredShares; i++) {
+                    const password = document.getElementById(`password-${i}`).value.trim();
+                    if (!password) {
+                        throw new Error('Please enter all required passwords');
+                    }
+                    passwords.push(password);
+                }
+                
+                // Combine shares to get encryption key
+                const encryptionKey = contentManager.combineShares(passwords);
+                
+                // Decrypt content
+                const decryptedContent = await contentManager.decryptContent(
+                    appData.currentContent.encryptedData, 
+                    encryptionKey
+                );
+                
+                // Show decrypted content immediately
+                showDecryptedContent(decryptedContent);
+                
+            } catch (error) {
+                ui.showError(error.message, 'decrypt-messages');
+            }
+        }
+
+        function showDecryptedContent(content) {
+            ui.showView('content-view');
+            
+            document.getElementById('content-title').textContent = appData.currentContent.name;
+            document.getElementById('content-text').innerHTML = `<pre>${escapeHtml(content.text || '')}</pre>`;
+            
+            const filesList = document.getElementById('content-files');
+            filesList.innerHTML = '';
+            
+            if (content.files && content.files.length > 0) {
+                content.files.forEach(file => {
+                    const li = document.createElement('li');
+                    const blob = contentManager.base64ToBlob(file.data, file.type);
+                    const url = URL.createObjectURL(blob);
+                    
+                    li.innerHTML = `
+                        <a href="${url}" download="${escapeHtml(file.name)}" target="_blank">
+                            ${escapeHtml(file.name)} (${file.type})
+                        </a>
+                    `;
+                    filesList.appendChild(li);
+                });
+            } else {
+                filesList.innerHTML = '<li>No files attached</li>';
+            }
+        }
+
+        // Admin functions
+        function showAdminView() {
+            ui.showView('admin-view');
+            showAdminList();
+        }
+
+        function exitAdmin() {
+            appData.isAdmin = false;
+            window.location.hash = '';
+            showMainView();
+        }
+
+        function showAdminList() {
+            document.getElementById('admin-editor').classList.add('hidden');
+            document.getElementById('admin-list').classList.remove('hidden');
+            renderAdminContentList();
+        }
+
+        function renderAdminContentList() {
+            const container = document.getElementById('admin-content-list');
+            
+            if (appData.contents.length === 0) {
+                container.innerHTML = '<p>No content created yet.</p>';
+                return;
+            }
+            
+            container.innerHTML = appData.contents.map(content => `
+                <div class="content-item">
+                    <h3>${escapeHtml(content.name)}</h3>
+                    <div class="content-meta">
+                        ${content.requiredShares} of ${content.totalShares} passwords required
+                    </div>
+                    <p>${escapeHtml(content.description)}</p>
+                    <button class="btn" onclick="editContent('${content.id}')">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteContent('${content.id}')">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function showCreateContent() {
+            appData.workingContent = {
+                id: null,  // null means new content
+                name: '',
+                description: '',
+                totalShares: 5,
+                requiredShares: 3,
+                text: '',
+                files: [],  // Always start with empty files array
+                masterKey: null
+            };
+            
+            document.getElementById('admin-list').classList.add('hidden');
+            document.getElementById('admin-editor').classList.remove('hidden');
+            document.getElementById('editor-title').textContent = 'Create New Content';
+            
+            populateEditor();
+            showEditorStep(1);
+        }
+
+        async function editContent(contentId) {
+            const content = appData.contents.find(c => c.id === contentId);
+            if (!content) return;
+            
+            const masterKey = prompt('Enter master key to edit this content:');
+            if (!masterKey) return;
+            
+            try {
+                // Decrypt existing content
+                const decryptedContent = await contentManager.decryptContent(content.encryptedData, masterKey);
+                
+                // Set up working content with existing data
+                appData.workingContent = {
+                    id: contentId,  // non-null means editing existing
+                    name: content.name,
+                    description: content.description,
+                    totalShares: content.totalShares,
+                    requiredShares: content.requiredShares,
+                    text: decryptedContent.text || '',
+                    files: decryptedContent.files || [],
+                    masterKey: masterKey
+                };
+                
+                document.getElementById('admin-list').classList.add('hidden');
+                document.getElementById('admin-editor').classList.remove('hidden');
+                document.getElementById('editor-title').textContent = 'Edit Content';
+                
+                populateEditor();
+                showEditorStep(3); // Skip to content step for editing
+                
+            } catch (error) {
+                alert('Invalid master key or corrupted content');
+            }
+        }
+
+        function updateFilePreview(existingFiles = []) {
+            const preview = document.getElementById('file-preview');
+            
+            if (existingFiles.length > 0) {
+                const existingFilesList = document.createElement('div');
+                existingFilesList.innerHTML = '<h4>Existing Files:</h4>';
+                
+                existingFiles.forEach(file => {
+                    const fileItem = document.createElement('div');
+                    fileItem.innerHTML = `• ${escapeHtml(file.name)} (${file.type || 'unknown'}) - <small>existing</small>`;
+                    existingFilesList.appendChild(fileItem);
+                });
+                
+                preview.appendChild(existingFilesList);
+            }
+        }
+
+        function deleteContent(contentId) {
+            if (confirm('Are you sure you want to delete this content?')) {
+                appData.contents = appData.contents.filter(c => c.id !== contentId);
+                saveData();
+                renderAdminContentList();
+            }
+        }
+
+        function resetEditor() {
+            document.getElementById('edit-name').value = '';
+            document.getElementById('edit-description').value = '';
+            document.getElementById('edit-total-shares').value = '5';
+            document.getElementById('edit-required-shares').value = '3';
+            document.getElementById('edit-text').value = '';
+            document.getElementById('file-input').value = '';
+            document.getElementById('file-preview').innerHTML = '';
+            appData.editingFiles = null;
+            ui.clearMessages();
+        }
+
+        function showEditorStep(step) {
+            document.querySelectorAll('.editor-step').forEach(s => s.classList.add('hidden'));
+            document.getElementById(`step${step}`).classList.remove('hidden');
+        }
+
+        function generateShares() {
+            try {
+                const totalShares = parseInt(document.getElementById('edit-total-shares').value);
+                const requiredShares = parseInt(document.getElementById('edit-required-shares').value);
+                
+                if (totalShares < 2 || requiredShares < 2 || requiredShares > totalShares) {
+                    throw new Error('Invalid share configuration');
+                }
+                
+                const result = contentManager.generateShares(totalShares, requiredShares);
+                
+                // Update working content
+                if (appData.workingContent) {
+                    appData.workingContent.masterKey = result.key;
+                }
+                
+                document.getElementById('master-key').value = result.key;
+                
+                const sharesList = document.getElementById('shares-list');
+                sharesList.innerHTML = result.shares.map((share, index) => `
+                    <div class="form-group">
+                        <label>Share ${index + 1} (give to person ${index + 1}):</label>
+                        <input type="text" value="${share}" readonly onclick="this.select()">
+                    </div>
+                `).join('');
+                
+                appData.currentShares = result;
+                showEditorStep(2);
+                
+            } catch (error) {
+                ui.showError(error.message);
+            }
+        }
+
+        function proceedToContent() {
+            showEditorStep(3);
+        }
+
+        async function saveContent() {
+            try {
+                const working = appData.workingContent;
+                if (!working) throw new Error('No content being worked on');
+                
+                // Update working content from form
+                working.name = document.getElementById('edit-name').value.trim();
+                working.description = document.getElementById('edit-description').value.trim();
+                working.text = document.getElementById('edit-text').value;
+                
+                if (!working.name || !working.description) {
+                    throw new Error('Please fill in all required fields');
+                }
+                
+                // Add newly uploaded files to existing files
+                const fileInput = document.getElementById('file-input');
+                if (fileInput.files.length > 0) {
+                    for (const file of fileInput.files) {
+                        const base64Data = await contentManager.fileToBase64(file);
+                        working.files.push({
+                            name: file.name,
+                            type: file.type,
+                            data: base64Data
+                        });
+                    }
+                }
+                
+                // Prepare content to encrypt
+                const contentToEncrypt = {
+                    text: working.text,
+                    files: working.files
+                };
+                
+                // Get encryption key
+                const encryptionKey = working.masterKey || 
+                    (appData.currentShares ? appData.currentShares.key : null);
+                
+                if (!encryptionKey) {
+                    throw new Error('No encryption key available. Please generate shares first.');
+                }
+                
+                const encryptedData = await contentManager.encryptContent(contentToEncrypt, encryptionKey);
+                
+                // Create content item
+                const contentItem = {
+                    id: working.id || generateId(),  // Use existing ID or generate new one
+                    name: working.name,
+                    description: working.description,
+                    totalShares: parseInt(document.getElementById('edit-total-shares').value),
+                    requiredShares: parseInt(document.getElementById('edit-required-shares').value),
+                    encryptedData: encryptedData,
+                    shares: appData.currentShares ? appData.currentShares.shares : [],
+                    created: new Date().toISOString()
+                };
+                
+                if (working.id) {
+                    // Update existing content
+                    const index = appData.contents.findIndex(c => c.id === working.id);
+                    appData.contents[index] = contentItem;
+                } else {
+                    // Add new content
+                    appData.contents.push(contentItem);
+                }
+                
+                // Clear working state
+                appData.workingContent = null;
+                appData.currentShares = null;
+                
+                saveData();
+                generateUpdatedFile();
+                ui.showSuccess('Content saved successfully!');
+                
+                setTimeout(() => {
+                    showAdminList();
+                }, 1500);
+                
+            } catch (error) {
+                ui.showError(error.message);
+            }
+        }
+
+        function cancelEdit() {
+            showAdminList();
+        }
+
+        // File preview
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const preview = document.getElementById('file-preview');
+            preview.innerHTML = '';
+            
+            if (e.target.files.length > 0) {
+                const fileList = document.createElement('div');
+                fileList.innerHTML = '<h4>Selected Files:</h4>';
+                
+                Array.from(e.target.files).forEach(file => {
+                    const fileItem = document.createElement('div');
+                    fileItem.innerHTML = `• ${escapeHtml(file.name)} (${file.type || 'unknown'})`;
+                    fileList.appendChild(fileItem);
+                });
+                
+                preview.appendChild(fileList);
+            }
+        });
+
+        // Utility functions
+        function generateId() {
+            return 'content_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Generate updated file with embedded data
+        function generateUpdatedFile() {
+            // Use the initial HTML instead of current state
+            let htmlContent = initialHTML;
+            
+            // Remove existing embedded data if present
+            htmlContent = htmlContent.replace(/<script[^>]*id="embedded-data"[^>]*>[\s\S]*?<\/script>/i, '');
+            
+            // Create new embedded data script
+            const dataScript = `
+                <script type="application/json" id="embedded-data">
+${JSON.stringify(appData.contents, null, 8)}
+                <\/script>`;
+            
+            // Insert data script before the closing head tag
+            const updatedHtml = htmlContent.replace('</head>', dataScript + '\n    </head>');
+            
+            // Create downloadable file
+            const blob = new Blob([updatedHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'secure-instructions-updated.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            ui.showSuccess('Updated file generated and downloaded!');
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', init);
+        
+        // Handle hash changes
+        window.addEventListener('hashchange', function() {
+            if (window.location.hash === '#admin') {
+                if (!appData.isAdmin) {
+                    appData.isAdmin = true;
+                    showAdminView();
+                }
+            } else {
+                if (appData.isAdmin) {
+                    appData.isAdmin = false;
+                    showMainView();
+                }
+            }
+        });
+
+        // Prevent form submission on enter in password fields
+        document.addEventListener('keypress', function(e) {
+            if (e.target.type === 'password' && e.key === 'Enter') {
+                e.preventDefault();
+                if (document.getElementById('decryption-view').classList.contains('hidden') === false) {
+                    attemptDecryption();
+                }
+            }
+        });
+
+        // Export functions to global scope for onclick handlers
+        window.showMainView = showMainView;
+        window.startDecryption = startDecryption;
+        window.attemptDecryption = attemptDecryption;
+        window.showAdminList = showAdminList;
+        window.showCreateContent = showCreateContent;
+        window.editContent = editContent;
+        window.deleteContent = deleteContent;
+        window.generateShares = generateShares;
+        window.proceedToContent = proceedToContent;
+        window.saveContent = saveContent;
+        window.cancelEdit = cancelEdit;
+        window.exitAdmin = exitAdmin;
+    </script>
+</body>
+</html>
