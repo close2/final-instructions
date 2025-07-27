@@ -348,8 +348,7 @@
 
             // Convert bytes to base64
             bytesToBase64(bytes) {
-                // I get an error: "too many function arguments" AI!
-                return btoa(String.fromCharCode(...bytes));
+                return btoa(String.fromCharCode.apply(null, Array.from(bytes)));
             },
 
             // Convert base64 to bytes
