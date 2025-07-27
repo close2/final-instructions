@@ -348,8 +348,14 @@
 
             // Convert bytes to base64
             bytesToBase64(bytes) {
-                // We still get a "too many arguments provided for a function call" error AI!
-                return btoa(String.fromCharCode.apply(null, Array.from(bytes)));
+                // Process in chunks to avoid argument limits
+                const chunkSize = 1024;
+                const chunks = [];
+                for (let i = 0; i < bytes.length; i += chunkSize) {
+                    const chunk = bytes.subarray(i, i + chunkSize);
+                    chunks.push(String.fromCharCode(...chunk));
+                }
+                return btoa(chunks.join(''));
             },
 
             // Convert base64 to bytes
