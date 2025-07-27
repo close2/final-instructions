@@ -348,6 +348,7 @@
 
             // Convert bytes to base64
             bytesToBase64(bytes) {
+                // I get an error: "too many function arguments" AI!
                 return btoa(String.fromCharCode(...bytes));
             },
 
@@ -520,7 +521,7 @@
                 // Remove any existing embedded data from the template
                 initialHTML = initialHTML.replace(/<script[^>]*id="embedded-data"[^>]*>[\s\S]*?<\/script>/i, '');
             } catch (e) {
-                console.warn('Could not fetch original HTML');
+                console.warn('Could not fetch original HTML' + e);
                 // Inform user, that we can't continue and abort.
                 ui.showError('Could not fetch original HTML, saving in the admin-area will not work.');
                 initialHTML = "";
@@ -804,6 +805,7 @@
                 showEditorStep(3); // Skip to content step for editing
                 
             } catch (error) {
+                console.log('Invalid master key or corrupted content ' + error);
                 alert('Invalid master key or corrupted content');
             }
         }
@@ -893,6 +895,7 @@
                 showEditorStep(2);
                 
             } catch (error) {
+                console.log('Error: ' + error);
                 ui.showError(error.message);
             }
         }
@@ -968,6 +971,7 @@
                 }, 1500);
                 
             } catch (error) {
+                console.log('Error: ' + error);
                 ui.showError(error.message);
             }
         }
