@@ -977,8 +977,35 @@
         }
 
         // File preview
-        document.getElementById('file-input').addEventListener('change', function(e) {
-            // Append files from e.target.files to appData.workingContent.files then call updateFilePreview AI!
+        document.getElementById('file-input').addEventListener('change', async function(e) {
+            if (appData.workingContent) {
+                // Process each file and add to working content
+                const filePromises = Array.from(e.target.files).map(async file => {
+                    const base64Data = await contentManager.fileToBase64(file);
+                    return {
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        data: base64Data
+                    };
+                });
+                
+                const processedFiles = await Promise.all(filePromises);
+                
+                // Initialize files array if it doesn't exist
+                if (!appData.workingContent.files) {
+                    appData.workingContent.files = [];
+                }
+                
+                // Add new files to existing files
+                appData.workingContent.files = [
+                    ...appData.workingContent.files,
+                    ...processedFiles
+                ];
+                
+                // Update the preview
+                updateFilePreview(appData.workingContent.files);
+            }
         });
 
         // Utility functions
