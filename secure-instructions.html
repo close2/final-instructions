@@ -914,20 +914,9 @@
                 if (!working.name || !working.description) {
                     throw new Error('Please fill in all required fields');
                 }
-                
-                // Add newly uploaded files to existing files
-                const fileInput = document.getElementById('file-input');
-                if (fileInput.files.length > 0) {
-                    for (const file of fileInput.files) {
-                        const base64Data = await contentManager.fileToBase64(file);
-                        working.files.push({
-                            name: file.name,
-                            type: file.type,
-                            data: base64Data
-                        });
-                    }
-                }
-                
+
+                // Nothing to do for files.  They are already in working.files.
+
                 // Prepare content to encrypt
                 const contentToEncrypt = {
                     text: working.text,
@@ -989,21 +978,7 @@
 
         // File preview
         document.getElementById('file-input').addEventListener('change', function(e) {
-            const preview = document.getElementById('file-preview');
-            preview.innerHTML = '';
-            
-            if (e.target.files.length > 0) {
-                const fileList = document.createElement('div');
-                fileList.innerHTML = '<h4>Selected Files:</h4>';
-                
-                Array.from(e.target.files).forEach(file => {
-                    const fileItem = document.createElement('div');
-                    fileItem.innerHTML = `• ${escapeHtml(file.name)} (${file.type || 'unknown'})`;
-                    fileList.appendChild(fileItem);
-                });
-                
-                preview.appendChild(fileList);
-            }
+            // Append files from e.target.files to appData.workingContent.files then call updateFilePreview AI!
         });
 
         // Utility functions
