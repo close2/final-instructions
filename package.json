@@ -1,0 +1,24 @@
+{
+  "name": "final-instructions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/close2/final-instructions.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://gitlab.com/close2/final-instructions/issues"
+  },
+  "homepage": "https://gitlab.com/close2/final-instructions#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.0"
+  }
+}
