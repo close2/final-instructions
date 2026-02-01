@@ -92,3 +92,12 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 .aider*
+
+# Playwright
+node_modules/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+downloaded-instructions.html
+junit.xml

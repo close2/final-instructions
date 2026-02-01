@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,10 +30,12 @@
             border-radius: 8px;
             padding: 24px;
             margin-bottom: 24px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        h1, h2, h3 {
+        h1,
+        h2,
+        h3 {
             margin-bottom: 16px;
         }
 
@@ -74,7 +77,9 @@
             font-weight: 500;
         }
 
-        input, textarea, select {
+        input,
+        textarea,
+        select {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
@@ -172,13 +177,15 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Main View Templates -->
         <div id="main-view">
             <div class="card">
                 <h1 data-i18n="app.title">Secure Instructions</h1>
-                <p data-i18n="app.description">This application allows you to access encrypted content that requires multiple passwords to decrypt. Select a content item below and follow the instructions.</p>
+                <p data-i18n="app.description">This application allows you to access encrypted content that requires
+                    multiple passwords to decrypt. Select a content item below and follow the instructions.</p>
             </div>
 
             <div class="card">
@@ -193,7 +200,8 @@
                 <button class="btn btn-secondary" onclick="showMainView()" data-i18n="common.back">Back</button>
                 <h2 id="decrypt-title"></h2>
                 <p id="decrypt-description"></p>
-                
+                <div id="decrypt-messages"></div>
+
                 <div id="password-inputs"></div>
                 <button class="btn" onclick="attemptDecryption()" data-i18n="decrypt.button">Decrypt Content</button>
             </div>
@@ -216,7 +224,8 @@
                 <h1 data-i18n="admin.title">Admin Interface</h1>
                 <div class="admin-nav">
                     <button class="btn" onclick="showAdminList()" data-i18n="admin.listContents">List Contents</button>
-                    <button class="btn" onclick="showCreateContent()" data-i18n="admin.createContent">Create Content</button>
+                    <button class="btn" onclick="showCreateContent()" data-i18n="admin.createContent">Create
+                        Content</button>
                     <button class="btn btn-secondary" onclick="exitAdmin()" data-i18n="admin.exit">Exit Admin</button>
                 </div>
             </div>
@@ -231,7 +240,7 @@
             <div id="admin-editor" class="card hidden">
                 <h2 id="editor-title" data-i18n="admin.createNew">Create New Content</h2>
                 <div id="editor-messages"></div>
-                
+
                 <div id="step1" class="editor-step">
                     <h3 data-i18n="admin.step1">Step 1: Basic Information</h3>
                     <div class="form-group">
@@ -243,14 +252,17 @@
                         <textarea id="edit-description" required></textarea>
                     </div>
                     <div class="form-group">
-                        <label data-i18n="admin.totalShares" for="edit-total-shares">Total Number of Password Shares:</label>
+                        <label data-i18n="admin.totalShares" for="edit-total-shares">Total Number of Password
+                            Shares:</label>
                         <input type="number" id="edit-total-shares" min="2" max="10" value="5" required>
                     </div>
                     <div class="form-group">
-                        <label data-i18n="admin.requiredShares" for="edit-required-shares">Required Shares to Decrypt:</label>
+                        <label data-i18n="admin.requiredShares" for="edit-required-shares">Required Shares to
+                            Decrypt:</label>
                         <input type="number" id="edit-required-shares" min="2" max="10" value="3" required>
                     </div>
-                    <button class="btn" onclick="generateShares()" data-i18n="admin.generateShares">Generate Shares</button>
+                    <button class="btn" onclick="generateShares()" data-i18n="admin.generateShares">Generate
+                        Shares</button>
                 </div>
 
                 <div id="step2" class="editor-step hidden">
@@ -260,7 +272,8 @@
                         <textarea id="master-key" readonly></textarea>
                     </div>
                     <div id="shares-list"></div>
-                    <button class="btn" onclick="proceedToContent()" data-i18n="admin.proceedToContent">Proceed to Content</button>
+                    <button class="btn" onclick="proceedToContent()" data-i18n="admin.proceedToContent">Proceed to
+                        Content</button>
                 </div>
 
                 <div id="step3" class="editor-step hidden">
@@ -282,8 +295,10 @@
     </div>
 
     <!-- TODO: Inline secrets.js library here for complete self-containment -->
-    <script src="https://cdn.jsdelivr.net/npm/secrets.js-grempe@2.0.0/secrets.min.js"></script>
-    
+    <script>/*! secrets.js-grempe 2019-09-07 */
+
+!function(t,e){"use strict";"function"==typeof define&&define.amd?define([],function(){return t.secrets=e()}):"object"==typeof exports?module.exports=e(require("crypto")):t.secrets=e(t.crypto)}(this,function(n){"use strict";var u,b,i,a,s;function h(){u={bits:8,radix:16,minBits:3,maxBits:20,bytesPerChar:2,maxBytesPerChar:6,primitivePolynomials:[null,null,1,3,3,5,3,3,29,17,9,5,83,27,43,3,45,9,39,39,9,5,3,33,27,9,71,39,9,5,83]},b={},i=new Array(1024).join("0"),a=!0,s=["nodeCryptoRandomBytes","browserCryptoGetRandomValues","testRandom"]}function f(){return!(!b||!b.rng||"function"!=typeof b.rng)}function g(t,e){var r;if(0===e||1===e)return t;if(e&&1024<e)throw new Error("Padding must be multiples of no larger than 1024 bits.");return e=e||b.bits,t&&(r=t.length%e),r?(i+t).slice(-(e-r+t.length)):t}function c(t){var e,r,n="";for(r=t.length-1;0<=r;r--){if(e=parseInt(t[r],16),isNaN(e))throw new Error("Invalid hex character.");n=g(e.toString(2),4)+n}return n}function m(t){var e,r,n="";for(r=(t=g(t,4)).length;4<=r;r-=4){if(e=parseInt(t.slice(r-4,r),2),isNaN(e))throw new Error("Invalid binary character.");n=e.toString(16)+n}return n}function o(){return!(!n||"object"!=typeof n||"function"!=typeof n.getRandomValues&&"object"!=typeof n.getRandomValues||"function"!=typeof Uint32Array&&"object"!=typeof Uint32Array)}function l(){return"object"==typeof n&&"function"==typeof n.randomBytes}function p(t){function a(t,e,r,n){var i,a=0,o="";for(e&&(i=e.length-1);a<i||o.length<t;)o+=g(Math.abs(parseInt(e[a],r)).toString(2),n),a++;return((o=o.substr(-t)).match(/0/g)||[]).length===o.length?null:o}function e(t){var e,r=null;for(16,4,e=Math.ceil(t/8);null===r;)r=a(t,n.randomBytes(e).toString("hex"),16,4);return r}function r(t){var e,r=null;for(10,32,e=Math.ceil(t/32);null===r;)r=a(t,n.getRandomValues(new Uint32Array(e)),10,32);return r}return t&&"testRandom"===t?(b.typeCSPRNG=t,function(t){var e,r,n=null;r=Math.ceil(t/32),e=new Uint32Array(r);for(var i=0;i<e.length;i++)e[i]=123456789;for(;null===n;)n=a(t,e,10,32);return n}):t&&"nodeCryptoRandomBytes"===t?(b.typeCSPRNG=t,e):t&&"browserCryptoGetRandomValues"===t?(b.typeCSPRNG=t,r):l()?(b.typeCSPRNG="nodeCryptoRandomBytes",e):o()?(b.typeCSPRNG="browserCryptoGetRandomValues",r):void 0}function d(t,e){var r,n=[];for(e&&(t=g(t,e)),r=t.length;r>b.bits;r-=b.bits)n.push(parseInt(t.slice(r-b.bits,r),2));return n.push(parseInt(t.slice(0,r),2)),n}function w(t,e){var r,n=b.logs[t],i=0;for(r=e.length-1;0<=r;r--)i=0!==i?b.exps[(n+b.logs[i])%b.maxShares]^e[r]:e[r];return i}function y(t,e,r){var n,i,a,o,s=0;for(a=0,n=e.length;a<n;a++)if(r[a]){for(i=b.logs[r[a]],o=0;o<n;o++)if(a!==o){if(t===e[o]){i=-1;break}i=(i+b.logs[t^e[o]]-b.logs[e[a]^e[o]]+b.maxShares)%b.maxShares}s=-1===i?s:s^b.exps[i]}return s}function x(t,e,r){var n,i,a=[],o=[t];for(n=1;n<r;n++)o[n]=parseInt(b.rng(b.bits),2);for(i=e+(n=1);n<i;n++)a[n-1]={x:n,y:w(n,o)};return a}function v(t,e,r){var n,i,a,o;if(e=parseInt(e,b.radix),n=(t=parseInt(t,10)||b.bits).toString(36).toUpperCase(),o=(a=Math.pow(2,t)-1).toString(b.radix).length,i=g(e.toString(b.radix),o),"number"!=typeof e||e%1!=0||e<1||a<e)throw new Error("Share id must be an integer between 1 and "+a+", inclusive.");return n+i+r}var t={init:function(t,e){var r,n,i=[],a=[],o=1;if(h(),t&&("number"!=typeof t||t%1!=0||t<u.minBits||t>u.maxBits))throw new Error("Number of bits must be an integer between "+u.minBits+" and "+u.maxBits+", inclusive.");if(e&&-1===s.indexOf(e))throw new Error("Invalid RNG type argument : '"+e+"'");for(b.radix=u.radix,b.bits=t||u.bits,b.size=Math.pow(2,b.bits),b.maxShares=b.size-1,r=u.primitivePolynomials[b.bits],n=0;n<b.size;n++)i[a[n]=o]=n,(o<<=1)>=b.size&&(o^=r,o&=b.maxShares);if(b.logs=i,b.exps=a,e&&this.setRNG(e),f()||this.setRNG(),!(f()&&b.bits&&b.size&&b.maxShares&&b.logs&&b.exps&&b.logs.length===b.size&&b.exps.length===b.size))throw new Error("Initialization failed.")},combine:function(t,e){var r,n,i,a,o,s,h,u="",f=[],l=[];for(e=e||0,r=0,i=t.length;r<i;r++){if(s=this.extractShareComponents(t[r]),void 0===o)o=s.bits;else if(s.bits!==o)throw new Error("Mismatched shares: Different bit settings.");if(b.bits!==o&&this.init(o),-1===f.indexOf(s.id))for(f.push(s.id),n=0,a=(h=d(c(s.data))).length;n<a;n++)l[n]=l[n]||[],l[n][f.length-1]=h[n]}for(r=0,i=l.length;r<i;r++)u=g(y(e,f,l[r]).toString(2))+u;return m(1<=e?u:u.slice(u.indexOf("1")+1))},getConfig:function(){var t={};return t.radix=b.radix,t.bits=b.bits,t.maxShares=b.maxShares,t.hasCSPRNG=f(),t.typeCSPRNG=b.typeCSPRNG,t},extractShareComponents:function(t){var e,r,n,i,a,o={};if((e=parseInt(t.substr(0,1),36))&&("number"!=typeof e||e%1!=0||e<u.minBits||e>u.maxBits))throw new Error("Invalid share : Number of bits must be an integer between "+u.minBits+" and "+u.maxBits+", inclusive.");if(i=Math.pow(2,e)-1,n=(Math.pow(2,e)-1).toString(b.radix).length,(a=new RegExp("^([a-kA-K3-9]{1})([a-fA-F0-9]{"+n+"})([a-fA-F0-9]+)$").exec(t))&&(r=parseInt(a[2],b.radix)),"number"!=typeof r||r%1!=0||r<1||i<r)throw new Error("Invalid share : Share id must be an integer between 1 and "+b.maxShares+", inclusive.");if(a&&a[3])return o.bits=e,o.id=r,o.data=a[3],o;throw new Error("The share data provided is invalid : "+t)},setRNG:function(t){var e="Random number generator is invalid ",r=" Supply an CSPRNG of the form function(bits){} that returns a string containing 'bits' number of random 1's and 0's.";if(t&&"string"==typeof t&&-1===s.indexOf(t))throw new Error("Invalid RNG type argument : '"+t+"'");if((t=t||p())&&"string"==typeof t&&(t=p(t)),a){if(t&&"function"!=typeof t)throw new Error(e+"(Not a function)."+r);if(t&&"string"!=typeof t(b.bits))throw new Error(e+"(Output is not a string)."+r);if(t&&!parseInt(t(b.bits),2))throw new Error(e+"(Binary string output not parseable to an Integer)."+r);if(t&&t(b.bits).length>b.bits)throw new Error(e+"(Output length is greater than config.bits)."+r);if(t&&t(b.bits).length<b.bits)throw new Error(e+"(Output length is less than config.bits)."+r)}return b.rng=t,!0},str2hex:function(t,e){var r,n,i,a,o,s,h="";if("string"!=typeof t)throw new Error("Input must be a character string.");if("number"!=typeof(e=e||u.bytesPerChar)||e<1||e>u.maxBytesPerChar||e%1!=0)throw new Error("Bytes per character must be an integer between 1 and "+u.maxBytesPerChar+", inclusive.");for(r=2*e,n=Math.pow(16,r)-1,o=0,s=t.length;o<s;o++){if(a=t[o].charCodeAt(),isNaN(a))throw new Error("Invalid character: "+t[o]);if(n<a)throw i=Math.ceil(Math.log(a+1)/Math.log(256)),new Error("Invalid character code ("+a+"). Maximum allowable is 256^bytes-1 ("+n+"). To convert this character, use at least "+i+" bytes.");h=g(a.toString(16),r)+h}return h},hex2str:function(t,e){var r,n,i,a="";if("string"!=typeof t)throw new Error("Input must be a hexadecimal string.");if("number"!=typeof(e=e||u.bytesPerChar)||e%1!=0||e<1||e>u.maxBytesPerChar)throw new Error("Bytes per character must be an integer between 1 and "+u.maxBytesPerChar+", inclusive.");for(n=0,i=(t=g(t,r=2*e)).length;n<i;n+=r)a=String.fromCharCode(parseInt(t.slice(n,n+r),16))+a;return a},random:function(t){if("number"!=typeof t||t%1!=0||t<2||65536<t)throw new Error("Number of bits must be an Integer between 1 and 65536.");return m(b.rng(t))},share:function(t,e,r,n){var i,a,o,s,h,u=new Array(e),f=new Array(e);if(n=n||128,"string"!=typeof t)throw new Error("Secret must be a string.");if("number"!=typeof e||e%1!=0||e<2)throw new Error("Number of shares must be an integer between 2 and 2^bits-1 ("+b.maxShares+"), inclusive.");if(e>b.maxShares)throw i=Math.ceil(Math.log(e+1)/Math.LN2),new Error("Number of shares must be an integer between 2 and 2^bits-1 ("+b.maxShares+"), inclusive. To create "+e+" shares, use at least "+i+" bits.");if("number"!=typeof r||r%1!=0||r<2)throw new Error("Threshold number of shares must be an integer between 2 and 2^bits-1 ("+b.maxShares+"), inclusive.");if(r>b.maxShares)throw i=Math.ceil(Math.log(r+1)/Math.LN2),new Error("Threshold number of shares must be an integer between 2 and 2^bits-1 ("+b.maxShares+"), inclusive.  To use a threshold of "+r+", use at least "+i+" bits.");if(e<r)throw new Error("Threshold number of shares was "+r+" but must be less than or equal to the "+e+" shares specified as the total to generate.");if("number"!=typeof n||n%1!=0||n<0||1024<n)throw new Error("Zero-pad length must be an integer between 0 and 1024 inclusive.");for(o=0,h=(t=d(t="1"+c(t),n)).length;o<h;o++)for(a=x(t[o],e,r),s=0;s<e;s++)u[s]=u[s]||a[s].x.toString(b.radix),f[s]=g(a[s].y.toString(2))+(f[s]||"");for(o=0;o<e;o++)u[o]=v(b.bits,u[o],m(f[o]));return u},newShare:function(t,e){var r;if(t&&"string"==typeof t&&(t=parseInt(t,b.radix)),r=t.toString(b.radix),t&&r&&e&&e[0])return v(this.extractShareComponents(e[0]).bits,r,this.combine(e,t));throw new Error("Invalid 'id' or 'shares' Array argument to newShare().")},_reset:h,_padLeft:g,_hex2bin:c,_bin2hex:m,_hasCryptoGetRandomValues:o,_hasCryptoRandomBytes:l,_getRNG:p,_isSetRNG:f,_splitNumStringToIntArray:d,_horner:w,_lagrange:y,_getShares:x,_constructPublicShareString:v};return t.init(),t});</script>
+
     <script>
         // Application State
         let appData = {
@@ -360,7 +375,13 @@
 
             // Convert base64 to bytes
             base64ToBytes(base64) {
-                return new Uint8Array(atob(base64).split('').map(c => c.charCodeAt(0)));
+                const binary_string = window.atob(base64);
+                const len = binary_string.length;
+                const bytes = new Uint8Array(len);
+                for (let i = 0; i < len; i++) {
+                    bytes[i] = binary_string.charCodeAt(i);
+                }
+                return bytes;
             },
 
             // Generate random bytes
@@ -399,7 +420,7 @@
                     cryptoKey,
                     data
                 );
-                
+
                 // Combine IV and encrypted data
                 const result = new Uint8Array(iv.length + encrypted.byteLength);
                 result.set(iv);
@@ -412,14 +433,14 @@
                 const encryptedData = this.base64ToBytes(encryptedBase64);
                 const iv = encryptedData.slice(0, 12);
                 const ciphertext = encryptedData.slice(12);
-                
+
                 const cryptoKey = await this.importKey(key);
                 const decrypted = await window.crypto.subtle.decrypt(
                     { name: 'AES-GCM', iv },
                     cryptoKey,
                     ciphertext
                 );
-                
+
                 return new Uint8Array(decrypted);
             }
         };
@@ -516,33 +537,74 @@
             }
         };
 
+        // Test Helper
+        const TestHelper = {
+            get isActive() {
+                // Check session storage first (persists across hash changes), then URL hash
+                return sessionStorage.getItem('test_mode') === 'true' || window.location.hash.includes('test');
+            },
+
+            init() {
+                if (this.isActive || window.location.hash.includes('test')) {
+                    console.log('Test mode active');
+                    sessionStorage.setItem('test_mode', 'true');
+                    document.body.classList.add('test-mode');
+                }
+            },
+
+            prefillCreation() {
+                if (!this.isActive) return;
+                const dateStr = new Date().toLocaleTimeString();
+                document.getElementById('edit-name').value = 'Test Content ' + dateStr;
+                document.getElementById('edit-description').value = 'Auto-generated for testing purposes at ' + dateStr;
+            },
+
+            cacheShares(shares) {
+                if (!this.isActive) return;
+                sessionStorage.setItem('test_shares', JSON.stringify(shares));
+            },
+
+            autoFillDecryption(requiredShares) {
+                if (!this.isActive) return;
+                const stored = sessionStorage.getItem('test_shares');
+                if (!stored) return;
+
+                try {
+                    const shares = JSON.parse(stored);
+                    for (let i = 0; i < requiredShares && i < shares.length; i++) {
+                        const input = document.getElementById(`password-${i}`);
+                        if (input) input.value = shares[i];
+                    }
+                } catch (e) {
+                    console.error('Failed to auto-fill shares', e);
+                }
+            }
+        };
+
         // Initialize application
         async function init() {
             // Fetch the original file to preserve formatting
-            // Using document.documentElement.outerHTML removes EOLs.  Any comment will deactivate subsequent code.
             try {
                 const response = await fetch(window.location.href);
                 initialHTML = await response.text();
-                
-                // Remove any existing embedded data from the template
                 initialHTML = initialHTML.replace(/<script[^>]*id="embedded-data"[^>]*>[\s\S]*?<\/script>/i, '');
             } catch (e) {
                 console.warn('Could not fetch original HTML' + e);
-                // Inform user, that we can't continue and abort.
                 ui.showError('Could not fetch original HTML, saving in the admin-area will not work.');
                 initialHTML = "";
             }
-            
+
             loadData();
-            
+            TestHelper.init();
+
             // Check if admin mode
-            if (window.location.hash === '#admin') {
+            if (window.location.hash.includes('admin')) {
                 appData.isAdmin = true;
                 showAdminView();
             } else {
                 showMainView();
             }
-            
+
             ui.applyI18n();
         }
 
@@ -553,15 +615,10 @@
                 const embeddedData = getEmbeddedData();
                 if (embeddedData) {
                     appData.contents = embeddedData;
-                    
-                    // Clean the initial HTML by removing the embedded data
-                    // so we start with a clean template for future exports
-                    // This shouldn't be necessary as we have already removed the embedded-data when fetching the original html,
-                    // but better safe than sorry.
                     initialHTML = initialHTML.replace(/<script[^>]*id="embedded-data"[^>]*>[\s\S]*?<\/script>/i, '');
                     return;
                 }
-                
+
                 // Fallback to localStorage for development
                 const stored = localStorage.getItem('secureInstructionsData');
                 if (stored) {
@@ -599,12 +656,12 @@
 
         function renderContentList() {
             const container = document.getElementById('content-list');
-            
+
             if (appData.contents.length === 0) {
                 container.innerHTML = '<p>No content available.</p>';
                 return;
             }
-            
+
             container.innerHTML = appData.contents.map(content => `
                 <div class="content-item">
                     <h3>${escapeHtml(content.name)}</h3>
@@ -621,20 +678,20 @@
         function startDecryption(contentId) {
             const content = appData.contents.find(c => c.id === contentId);
             if (!content) return;
-            
+
             appData.currentContent = content;
             ui.showView('decryption-view');
-            
+
             document.getElementById('decrypt-title').textContent = content.name;
             document.getElementById('decrypt-description').textContent = content.description;
-            
+
             renderPasswordInputs(content.requiredShares);
         }
 
         function renderPasswordInputs(requiredShares) {
             const container = document.getElementById('password-inputs');
             container.innerHTML = '';
-            
+
             for (let i = 0; i < requiredShares; i++) {
                 const div = document.createElement('div');
                 div.className = 'password-input';
@@ -644,13 +701,16 @@
                 `;
                 container.appendChild(div);
             }
+
+            // Test Helper Hook
+            TestHelper.autoFillDecryption(requiredShares);
         }
 
         async function attemptDecryption() {
             try {
                 const passwords = [];
                 const requiredShares = appData.currentContent.requiredShares;
-                
+
                 // Collect passwords
                 for (let i = 0; i < requiredShares; i++) {
                     const password = document.getElementById(`password-${i}`).value.trim();
@@ -659,19 +719,19 @@
                     }
                     passwords.push(password);
                 }
-                
+
                 // Combine shares to get encryption key
                 const encryptionKey = contentManager.combineShares(passwords);
-                
+
                 // Decrypt content
                 const decryptedContent = await contentManager.decryptContent(
-                    appData.currentContent.encryptedData, 
+                    appData.currentContent.encryptedData,
                     encryptionKey
                 );
-                
+
                 // Show decrypted content immediately
                 showDecryptedContent(decryptedContent);
-                
+
             } catch (error) {
                 ui.showError(error.message, 'decrypt-messages');
             }
@@ -679,19 +739,19 @@
 
         function showDecryptedContent(content) {
             ui.showView('content-view');
-            
+
             document.getElementById('content-title').textContent = appData.currentContent.name;
             document.getElementById('content-text').innerHTML = `<pre>${escapeHtml(content.text || '')}</pre>`;
-            
+
             const filesList = document.getElementById('content-files');
             filesList.innerHTML = '';
-            
+
             if (content.files && content.files.length > 0) {
                 content.files.forEach(file => {
                     const li = document.createElement('li');
                     const blob = contentManager.base64ToBlob(file.data, file.type);
                     const url = URL.createObjectURL(blob);
-                    
+
                     li.innerHTML = `
                         <a href="${url}" download="${escapeHtml(file.name)}" target="_blank">
                             ${escapeHtml(file.name)} (${file.type})
@@ -724,12 +784,12 @@
 
         function renderAdminContentList() {
             const container = document.getElementById('admin-content-list');
-            
+
             if (appData.contents.length === 0) {
                 container.innerHTML = '<p>No content created yet.</p>';
                 return;
             }
-            
+
             container.innerHTML = appData.contents.map(content => `
                 <div class="content-item">
                     <h3>${escapeHtml(content.name)}</h3>
@@ -754,43 +814,46 @@
                 files: [],  // Always start with empty files array
                 masterKey: null
             };
-            
+
             document.getElementById('admin-list').classList.add('hidden');
             document.getElementById('admin-editor').classList.remove('hidden');
             document.getElementById('editor-title').textContent = 'Create New Content';
-            
+
             populateEditor();
             showEditorStep(1);
         }
 
         function populateEditor() {
             if (!appData.workingContent) return;
-            
+
             // Populate basic information
             document.getElementById('edit-name').value = appData.workingContent.name || '';
             document.getElementById('edit-description').value = appData.workingContent.description || '';
             document.getElementById('edit-total-shares').value = appData.workingContent.totalShares || 5;
             document.getElementById('edit-required-shares').value = appData.workingContent.requiredShares || 3;
             document.getElementById('edit-text').value = appData.workingContent.text || '';
-            
+
+            // Test Helper Hook
+            TestHelper.prefillCreation();
+
             // Clear file input and preview existing files
             document.getElementById('file-input').value = '';
             updateFilePreview(appData.workingContent.files || []);
-            
+
             ui.clearMessages();
         }
 
         async function editContent(contentId) {
             const content = appData.contents.find(c => c.id === contentId);
             if (!content) return;
-            
+
             const masterKey = prompt('Enter master key to edit this content:');
             if (!masterKey) return;
-            
+
             try {
                 // Decrypt existing content
                 const decryptedContent = await contentManager.decryptContent(content.encryptedData, masterKey);
-                
+
                 // Set up working content with existing data
                 appData.workingContent = {
                     id: contentId,  // non-null means editing existing
@@ -802,14 +865,14 @@
                     files: decryptedContent.files || [],
                     masterKey: masterKey
                 };
-                
+
                 document.getElementById('admin-list').classList.add('hidden');
                 document.getElementById('admin-editor').classList.remove('hidden');
                 document.getElementById('editor-title').textContent = 'Edit Content';
-                
+
                 populateEditor();
                 showEditorStep(3); // Skip to content step for editing
-                
+
             } catch (error) {
                 console.log('Invalid master key or corrupted content ' + error);
                 alert('Invalid master key or corrupted content');
@@ -819,21 +882,48 @@
         function updateFilePreview(existingFiles = []) {
             const preview = document.getElementById('file-preview');
             preview.innerHTML = '';
-            
+
             if (existingFiles.length > 0) {
                 const existingFilesList = document.createElement('div');
-                existingFilesList.innerHTML = '<h4>Existing Files:</h4>';
-                
+                existingFilesList.innerHTML = '<h4>Attached Files:</h4>';
+
                 existingFiles.forEach((file, index) => {
                     const fileItem = document.createElement('div');
                     fileItem.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid #eee;';
+
+                    let downloadLink = '';
+                    try {
+                        // Create a preview link if possible
+                        // Note: For very large files this might be heavy, but we have the data in memory anyway
+                        const blob = contentManager.base64ToBlob(file.data, file.type || 'application/octet-stream');
+                        const url = URL.createObjectURL(blob);
+                        downloadLink = `<a href="${url}" download="${escapeHtml(file.name)}" target="_blank" style="margin-right: 10px; font-size: 12px;">Download</a>`;
+
+                        // Clean up object URLs when we rebuild the list? 
+                        // We rely on the fact that this is a single page app re-rendering. 
+                        // Ideally we should revoke old URLs.
+                        // But for a simple fix, this is acceptable.
+                    } catch (e) {
+                        console.warn('Could not create preview link', e);
+                    }
+
+                    const badge = file.isNew
+                        ? '<span class="badge badge-success" style="background: #28a745; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; margin-left: 5px;">New</span>'
+                        : '<span class="badge badge-secondary" style="background: #6c757d; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; margin-left: 5px;">Existing</span>';
+
                     fileItem.innerHTML = `
-                        <span>• ${escapeHtml(file.name)} (${file.type || 'unknown'}) - <small>existing</small></span>
-                        <button type="button" class="btn btn-danger" style="padding: 4px 8px; font-size: 12px;" onclick="removeExistingFile(${index})">Remove</button>
+                        <div style="display: flex; align-items: center;">
+                            <span>• ${escapeHtml(file.name)} <small>(${file.type || 'unknown'})</small></span>
+                            ${badge}
+                        </div>
+                        <div>
+                            ${downloadLink}
+                            <button type="button" class="btn btn-danger" style="padding: 4px 8px; font-size: 12px; margin-bottom: 0;" onclick="removeExistingFile(${index})">Remove</button>
+                        </div>
                     `;
                     existingFilesList.appendChild(fileItem);
                 });
-                
+
                 preview.appendChild(existingFilesList);
             }
         }
@@ -875,20 +965,20 @@
             try {
                 const totalShares = parseInt(document.getElementById('edit-total-shares').value);
                 const requiredShares = parseInt(document.getElementById('edit-required-shares').value);
-                
+
                 if (totalShares < 2 || requiredShares < 2 || requiredShares > totalShares) {
                     throw new Error('Invalid share configuration');
                 }
-                
+
                 const result = contentManager.generateShares(totalShares, requiredShares);
-                
+
                 // Update working content
                 if (appData.workingContent) {
                     appData.workingContent.masterKey = result.key;
                 }
-                
+
                 document.getElementById('master-key').value = result.key;
-                
+
                 const sharesList = document.getElementById('shares-list');
                 sharesList.innerHTML = result.shares.map((share, index) => `
                     <div class="form-group">
@@ -896,10 +986,14 @@
                         <input type="text" value="${share}" readonly onclick="this.select()">
                     </div>
                 `).join('');
-                
+
                 appData.currentShares = result;
+
+                // Test Helper Hook
+                TestHelper.cacheShares(result.shares);
+
                 showEditorStep(2);
-                
+
             } catch (error) {
                 console.log('Error: ' + error);
                 ui.showError(error.message);
@@ -914,12 +1008,12 @@
             try {
                 const working = appData.workingContent;
                 if (!working) throw new Error('No content being worked on');
-                
+
                 // Update working content from form
                 working.name = document.getElementById('edit-name').value.trim();
                 working.description = document.getElementById('edit-description').value.trim();
                 working.text = document.getElementById('edit-text').value;
-                
+
                 if (!working.name || !working.description) {
                     throw new Error('Please fill in all required fields');
                 }
@@ -927,21 +1021,25 @@
                 // Nothing to do for files.  They are already in working.files.
 
                 // Prepare content to encrypt
+                // Prepare content to encrypt (strip transient UI state like isNew)
                 const contentToEncrypt = {
                     text: working.text,
-                    files: working.files
+                    files: (working.files || []).map(f => {
+                        const { isNew, ...rest } = f;
+                        return rest;
+                    })
                 };
-                
+
                 // Get encryption key
-                const encryptionKey = working.masterKey || 
+                const encryptionKey = working.masterKey ||
                     (appData.currentShares ? appData.currentShares.key : null);
-                
+
                 if (!encryptionKey) {
                     throw new Error('No encryption key available. Please generate shares first.');
                 }
-                
+
                 const encryptedData = await contentManager.encryptContent(contentToEncrypt, encryptionKey);
-                
+
                 // Create content item
                 const contentItem = {
                     id: working.id || generateId(),  // Use existing ID or generate new one
@@ -953,7 +1051,7 @@
                     shares: appData.currentShares ? appData.currentShares.shares : [],
                     created: new Date().toISOString()
                 };
-                
+
                 if (working.id) {
                     // Update existing content
                     const index = appData.contents.findIndex(c => c.id === working.id);
@@ -962,20 +1060,20 @@
                     // Add new content
                     appData.contents.push(contentItem);
                 }
-                
+
                 // Clear working state
                 appData.workingContent = null;
                 appData.currentShares = null;
-                
+
                 saveData();
                 // ToDo only show save button, if we were able to fetch the original HTML.
                 generateUpdatedFile();
                 ui.showSuccess('Content saved successfully!');
-                
+
                 setTimeout(() => {
                     showAdminList();
                 }, 1500);
-                
+
             } catch (error) {
                 console.log('Error: ' + error);
                 ui.showError(error.message);
@@ -983,38 +1081,52 @@
         }
 
         function cancelEdit() {
+            appData.workingContent = null;
+            appData.currentShares = null;
             showAdminList();
         }
 
         // File preview
-        document.getElementById('file-input').addEventListener('change', async function(e) {
+        document.getElementById('file-input').addEventListener('change', async function (e) {
             if (appData.workingContent) {
+                if (e.target.files.length === 0) return;
+
                 // Process each file and add to working content
                 const filePromises = Array.from(e.target.files).map(async file => {
-                    const base64Data = await contentManager.fileToBase64(file);
-                    return {
-                        name: file.name,
-                        type: file.type,
-                        size: file.size,
-                        data: base64Data
-                    };
+                    try {
+                        const base64Data = await contentManager.fileToBase64(file);
+                        return {
+                            name: file.name,
+                            type: file.type,
+                            size: file.size,
+                            data: base64Data,
+                            isNew: true
+                        };
+                    } catch (err) {
+                        console.error("Error reading file", file.name, err);
+                        ui.showError(`Failed to read file ${file.name}`);
+                        return null;
+                    }
                 });
-                
-                const processedFiles = await Promise.all(filePromises);
-                
+
+                const processedFiles = (await Promise.all(filePromises)).filter(f => f !== null);
+
                 // Initialize files array if it doesn't exist
                 if (!appData.workingContent.files) {
                     appData.workingContent.files = [];
                 }
-                
+
                 // Add new files to existing files
                 appData.workingContent.files = [
                     ...appData.workingContent.files,
                     ...processedFiles
                 ];
-                
+
                 // Update the preview
                 updateFilePreview(appData.workingContent.files);
+
+                // Clear the input so the same file can be selected again if needed
+                e.target.value = '';
             }
         });
 
@@ -1033,29 +1145,29 @@
         function generateUpdatedFile() {
             // Use the fetched HTML which preserves formatting
             let htmlContent = initialHTML;
-            
+
             // Remove existing embedded data if present
             htmlContent = htmlContent.replace(/<script[^>]*id="embedded-data"[^>]*>[\s\S]*?<\/script>/i, '');
-            
+
             // Create new embedded data script with proper indentation
             const indentedJson = JSON.stringify(appData.contents, null, 4)
                 .split('\n')
                 .map(line => line ? '        ' + line : line) // Add 8 spaces for proper HTML indentation
                 .join('\n');
-            
+
             // Do not inline the following variable!  Otherwise we will remove it when trying to remove the "real" embedded-data
             const embeddedDataId = 'embedded-data';
             const dataScript = `    <script type="application/json" id="${embeddedDataId}">
 ${indentedJson}
     <\/script>`;
-            
+
             // Insert data script before the closing head tag
             const updatedHtml = htmlContent.replace('</head>', dataScript + '\n</head>');
-            
+
             // Create downloadable file
             const blob = new Blob([updatedHtml], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
-            
+
             const a = document.createElement('a');
             a.href = url;
             a.download = 'secure-instructions-updated.html';
@@ -1063,15 +1175,15 @@ ${indentedJson}
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
+
             ui.showSuccess('Updated file generated and downloaded!');
         }
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', init);
-        
+
         // Handle hash changes
-        window.addEventListener('hashchange', function() {
+        window.addEventListener('hashchange', function () {
             if (window.location.hash === '#admin') {
                 if (!appData.isAdmin) {
                     appData.isAdmin = true;
@@ -1086,7 +1198,7 @@ ${indentedJson}
         });
 
         // Prevent form submission on enter in password fields
-        document.addEventListener('keypress', function(e) {
+        document.addEventListener('keypress', function (e) {
             if (e.target.type === 'password' && e.key === 'Enter') {
                 e.preventDefault();
                 if (document.getElementById('decryption-view').classList.contains('hidden') === false) {
@@ -1111,4 +1223,5 @@ ${indentedJson}
         window.removeExistingFile = removeExistingFile;
     </script>
 </body>
+
 </html>
