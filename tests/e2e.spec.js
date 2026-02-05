@@ -74,7 +74,7 @@ test.describe('Secure Instructions E2E', () => {
         await page.fill('#edit-text', 'These are the secret instructions.');
 
         const downloadPromise = page.waitForEvent('download');
-        await page.click('text=Save Content');
+        await page.click('#btn-save-content');
         const download = await downloadPromise;
 
         await download.saveAs(downloadedFilePath);

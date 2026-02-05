@@ -21,7 +21,7 @@ Instead of one master password that could be stolen, you split the "key" into se
 You decide the math: For example, you give out 5 passwords, but require any 3 to unlock the file ($k=3, n=5$). This way, if one person is unavailable or loses their password, the vault can still be opened, but no single person can "snoop" on their own.
 
 ### 🔑 Master Key & Editing
-When you create the vault, you will also get a **Master Key**. This key is simply a combination of all the shares. It allows you to re-open the document later to edit the contents. **Keep this safe!**
+When you create the vault, you will also get a **Master Key**. It allows you to re-open the document later to edit the contents. **Keep this safe!**
 
 ### ✍️ Digital Signatures (Important Note)
 If the required number of people combine their passwords, they *can* create a new document that works with the same keys.
@@ -61,6 +61,9 @@ The easiest way to create your secure vault is to use our privacy-respecting ver
 *(Note: Even when using this link, your data stays in your browser and is never sent to our servers.)*
 
 
+## Github and Gitlab Repositories
+- GitHub: [https://github.com/close2/secure-instructions](https://github.com/close2/secure-instructions)
+- GitLab: [https://gitlab.com/close2/final-instructions](https://gitlab.com/close2/final-instructions)
 
 ## License and Credits
 
