@@ -186,6 +186,15 @@
                 <h1 data-i18n="app.title">Secure Instructions</h1>
                 <p data-i18n="app.description">This application allows you to access encrypted content that requires
                     multiple passwords to decrypt. Select a content item below and follow the instructions.</p>
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #eee;">
+                    <p data-i18n="app.intro">So, you received this file and a password? Here is what to do:</p>
+                    <ol style="margin-left: 20px; margin-top: 8px; margin-bottom: 16px;">
+                        <li>Look at the "Available Contents" list below.</li>
+                        <li>Click "Access Content" on the item you want to open.</li>
+                        <li>Enter the passwords you were given. You need enough different passwords from different people to unlock it.</li>
+                    </ol>
+                    <button class="btn btn-secondary" onclick="window.location.hash = '#admin'" data-i18n="app.create">Create New Vault</button>
+                 </div>
             </div>
 
             <div class="card">
@@ -200,6 +209,7 @@
                 <button class="btn btn-secondary" onclick="showMainView()" data-i18n="common.back">Back</button>
                 <h2 id="decrypt-title"></h2>
                 <p id="decrypt-description"></p>
+                <p style="margin-bottom: 16px; color: #666;" data-i18n="decrypt.guide">Enter the password shares you have collected below. The order does not matter.</p>
                 <div id="decrypt-messages"></div>
 
                 <div id="password-inputs"></div>
@@ -260,6 +270,10 @@
                         <label data-i18n="admin.requiredShares" for="edit-required-shares">Required Shares to
                             Decrypt:</label>
                         <input type="number" id="edit-required-shares" min="2" max="10" value="3" required>
+                        <p style="font-size: 13px; color: #666; margin-top: 4px;">
+                            <strong>Total Shares:</strong> How many different passwords to create.<br>
+                            <strong>Required Shares:</strong> How many of those are needed to unlock the file.
+                        </p>
                     </div>
                     <button class="btn" onclick="generateShares()" data-i18n="admin.generateShares">Generate
                         Shares</button>
@@ -270,8 +284,15 @@
                     <div class="form-group">
                         <label data-i18n="admin.masterKey" for="master-key">Master Key (save this securely):</label>
                         <textarea id="master-key" readonly></textarea>
+                        <p style="font-size: 13px; color: #d63384; margin-top: 4px; font-weight: bold;">
+                            This Master Key allows you to re-open and edit this document later. It is mathematically equivalent to combining all shares. Keep it safe!
+                        </p>
                     </div>
                     <div id="shares-list"></div>
+                    <div style="background: #e2e3e5; padding: 12px; border-radius: 4px; margin-bottom: 16px;">
+                        <strong>IMPORTANT:</strong> You must copy and distribute these shares to your trusted contacts NOW.
+                        They are not stored anywhere else. If you lose them and the Master Key, the data will be lost forever.
+                    </div>
                     <button class="btn" onclick="proceedToContent()" data-i18n="admin.proceedToContent">Proceed to
                         Content</button>
                 </div>
@@ -287,7 +308,14 @@
                         <input type="file" id="file-input" multiple>
                     </div>
                     <div id="file-preview"></div>
-                    <button class="btn" onclick="saveContent()" data-i18n="admin.save">Save Content</button>
+                    <div style="margin-bottom: 16px; padding: 12px; background: #d1ecf1; border-radius: 4px; color: #0c5460;">
+                        Clicking "Save Content" will generate and download a <strong>new HTML file</strong>.
+                        You must distribute this new file to your recipients. The current file you are looking at will not be changed.
+                    </div>
+                    <div id="save-error-message" class="error hidden" style="margin-bottom: 16px;">
+                        Cannot save changes because the original source file could not be read. Please ensure you are serving this file via a web server (e.g., `python -m http.server`).
+                    </div>
+                    <button id="btn-save-content" class="btn" onclick="saveContent()" data-i18n="admin.save">Save Content</button>
                     <button class="btn btn-secondary" onclick="cancelEdit()" data-i18n="common.cancel">Cancel</button>
                 </div>
             </div>
@@ -338,7 +366,10 @@
                 'admin.step3': 'Step 3: Content',
                 'admin.instructionText': 'Instruction Text (encrypted):',
                 'admin.uploadFiles': 'Upload Files:',
-                'admin.save': 'Save Content'
+                'admin.save': 'Save Content',
+                'app.intro': 'So, you received this file and a password? Here is what to do:',
+                'app.create': 'Create New Vault',
+                'decrypt.guide': 'Enter the password shares you have collected below. The order does not matter.'
             }
         };
 
@@ -618,21 +649,13 @@
                     return;
                 }
 
-                // Fallback to localStorage for development
-                const stored = localStorage.getItem('secureInstructionsData');
-                if (stored) {
-                    appData.contents = JSON.parse(stored);
-                }
+                appData.contents = [];
             } catch (e) {
                 console.error('Error loading data:', e);
                 appData.contents = [];
             }
         }
 
-        // Save data to localStorage (for development)
-        function saveData() {
-            localStorage.setItem('secureInstructionsData', JSON.stringify(appData.contents));
-        }
 
         // Get embedded data (looks for embedded script element)
         function getEmbeddedData() {
@@ -840,6 +863,18 @@
             updateFilePreview(appData.workingContent.files || []);
 
             ui.clearMessages();
+            
+            // Check if we can save
+            const saveBtn = document.getElementById('btn-save-content');
+            const saveError = document.getElementById('save-error-message');
+            
+            if (!initialHTML) {
+                saveBtn.classList.add('hidden');
+                saveError.classList.remove('hidden');
+            } else {
+                saveBtn.classList.remove('hidden');
+                saveError.classList.add('hidden');
+            }
         }
 
         async function editContent(contentId) {
@@ -938,7 +973,6 @@
         function deleteContent(contentId) {
             if (confirm('Are you sure you want to delete this content?')) {
                 appData.contents = appData.contents.filter(c => c.id !== contentId);
-                saveData();
                 renderAdminContentList();
             }
         }
@@ -1064,8 +1098,10 @@
                 appData.workingContent = null;
                 appData.currentShares = null;
 
-                saveData();
-                // ToDo only show save button, if we were able to fetch the original HTML.
+                // Clear working state
+                appData.workingContent = null;
+                appData.currentShares = null;
+
                 generateUpdatedFile();
                 ui.showSuccess('Content saved successfully!');
 
