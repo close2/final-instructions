@@ -61,11 +61,11 @@ The easiest way to create your secure vault is to use our privacy-respecting ver
 *(Note: Even when using this link, your data stays in your browser and is never sent to our servers.)*
 
 
-## Github and Gitlab Repositories
+## 🐙 GitHub and GitLab Repositories
 - GitHub: [https://github.com/close2/secure-instructions](https://github.com/close2/secure-instructions)
 - GitLab: [https://gitlab.com/close2/final-instructions](https://gitlab.com/close2/final-instructions)
 
-## License and Credits
+## ⚖️ License and Credits
 
 This project is licensed under the MIT License.
 
