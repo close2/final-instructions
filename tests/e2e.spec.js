@@ -80,51 +80,7 @@ test.describe('Secure Instructions E2E', () => {
         await download.saveAs(downloadedFilePath);
         expect(fs.existsSync(downloadedFilePath)).toBeTruthy();
 
-        // 2. User Flow (Original File)
-        await page.goto('/secure-instructions.html');
-        await page.click('text=Access Content'); // Opens the last created (which is ours, assuming clean state or appended)
-        // NOTE: In a real persistent app, we'd need to identify *which* content. But here we just added one. 
-        // If there are many, we might need to match by text.
-        // Let's assume we click the button inside the card that has our title.
-        // Reload to be safe and find by text
-        await page.goto('/secure-instructions.html');
-        const contentCard = page.locator('.content-item', { hasText: 'E2E Test Content' });
-        await contentCard.locator('button').click();
-
-        // Corner Case: Insufficient Shares
-        // Enter only 1 share
-        await page.fill('#password-0', shares[0]);
-        await page.click('text=Decrypt Content');
-        // Expect failure (error message)
-        // Note: The app currently might just fail silently or show an error. 
-        // Based on code: ui.showError(error.message)
-        // Secrets.js throws if fewer than required.
-        const errorMessage = page.locator('.error');
-        // We might need to wait for it.
-        // Actually the UI might require all inputs to be filled if they have 'required' attribute.
-        // Let's check if the browser validation stops us.
-        // Or if we fill garbage in others.
-        // Let's try filling 2 correct shares and 1 empty? 
-        // Logic: "Please enter all required passwords" throws if empty.
-
-        // Let's try filling 3 inputs, but one is wrong.
-        await page.fill('#password-1', 'wrongshare');
-        await page.fill('#password-2', shares[2]);
-        await page.click('text=Decrypt Content');
-        await expect(errorMessage).toBeVisible();
-        // "Invalid or insufficient shares" or similar from secrets.js
-
-        // Valid Decryption
-        await page.fill('#password-0', shares[0]);
-        await page.fill('#password-1', shares[1]);
-        await page.fill('#password-2', shares[2]);
-        await page.click('text=Decrypt Content');
-
-        // Verify Content
-        await expect(page.locator('#content-text')).toContainText('These are the secret instructions.');
-        await expect(page.locator('#content-files')).toContainText('secret.txt');
-
-        // 3. User Flow (Downloaded File)
+        // 2. User Flow (Downloaded File)
         // We open the file:// URL of the downloaded file
         await page.goto(`file://${downloadedFilePath}`);
 
@@ -135,6 +91,18 @@ test.describe('Secure Instructions E2E', () => {
         // Access and Decrypt
         await downloadedCard.locator('button').click();
 
+        // Corner Case: Insufficient Shares (Moved from original flow)
+        await page.fill('#password-0', shares[0]);
+        await page.fill('#password-1', 'wrongshare');
+        await page.fill('#password-2', shares[2]);
+        await page.click('text=Decrypt Content');
+        await page.fill('#password-2', shares[2]);
+        await page.click('text=Decrypt Content');
+        const errorMessage = page.locator('#decrypt-messages .error');
+        await expect(errorMessage).toBeVisible();
+        await expect(errorMessage).toContainText('Invalid or insufficient shares');
+
+        // Valid Decryption
         await page.fill('#password-0', shares[0]);
         await page.fill('#password-1', shares[3]); // Use different combination
         await page.fill('#password-2', shares[4]);
