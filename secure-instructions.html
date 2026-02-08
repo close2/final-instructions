@@ -6,6 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Instructions</title>
     <style>
+        :root {
+            /* Palette: Indigo & Slate */
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            
+            /* Spacing & Radius */
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,126 +34,152 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
+            color: var(--text-main);
+            background: var(--background);
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px;
         }
 
+        /* Modern Card */
         .card {
-            background: white;
-            border-radius: 8px;
-            padding: 24px;
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 32px;
             margin-bottom: 24px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+        
+        .vault-card {
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .vault-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+        
+        .vault-add-card {
+            border: 2px dashed var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            background: transparent;
+            min-height: 200px;
+        }
+        
+        .vault-add-card:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
         }
 
-        h1,
-        h2,
-        h3 {
+        h1, h2, h3 {
+            color: var(--text-main);
+            font-weight: 700;
+            letter-spacing: -0.025em;
             margin-bottom: 16px;
         }
+        
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 1.5rem; }
+        
+        p { color: var(--text-muted); margin-bottom: 16px; }
 
+        /* Buttons */
         .btn {
-            background: #007bff;
+            background: var(--primary);
             color: white;
             border: none;
             padding: 12px 24px;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: 600;
             font-size: 14px;
-            margin-right: 8px;
-            margin-bottom: 8px;
+            transition: filter 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .btn:hover {
-            background: #0056b3;
-        }
+        .btn:hover { filter: brightness(110%); }
+        .btn-secondary { background: var(--surface); color: var(--text-main); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: #f1f5f9; }
+        .btn-success { background: var(--success); }
+        .btn-danger { background: var(--danger); }
+        
+        .btn-icon { padding: 8px; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
 
-        .btn-danger {
-            background: #dc3545;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        input,
-        textarea,
-        select {
+        /* Forms */
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
+        input, textarea, select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             font-size: 14px;
+            background: var(--background);
+            transition: border-color 0.2s;
         }
+        input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
 
-        textarea {
-            height: 120px;
-            resize: vertical;
+        .hidden { display: none !important; }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 100;
         }
-
-        .hidden {
-            display: none;
-        }
-
-        .progress {
-            width: 100%;
-            height: 20px;
-            background: #e9ecef;
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 16px 0;
-        }
-
-        .content-item {
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-
-        .content-item h3 {
-            margin-bottom: 8px;
-        }
-
-        .content-meta {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 12px;
-        }
-
-        .file-list {
-            list-style: none;
+        .modal-content {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            width: 90%; max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
             padding: 0;
         }
-
-        .file-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .file-list a {
+        .modal-header { padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { padding: 32px; }
+        .modal-footer { padding: 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; background: var(--background); }
+        
+        /* Badge */
+        .badge {
+            display: inline-flex; align-items: center;
+            padding: 4px 10px; border-radius: 999px;
+            font-size: 12px; font-weight: 600;
+            background: #e0e7ff; color: var(--primary);
+        }     .file-list a {
             color: #007bff;
             text-decoration: none;
         }
@@ -152,14 +199,6 @@
             flex: 1;
         }
 
-        .admin-nav {
-            margin-bottom: 24px;
-        }
-
-        .admin-nav button {
-            margin-right: 8px;
-        }
-
         .error {
             background: #f8d7da;
             color: #721c24;
@@ -175,10 +214,467 @@
             border-radius: 4px;
             margin-bottom: 16px;
         }
+
+        #main-create-btn { margin-top: 16px; }
+        
+        .text-main { color: var(--text-main); }
+        
+        .admin-header, .admin-global-settings, .vault-card-header {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+
+        .admin-actions { display: flex; gap: 8px; }
+        
+        .greeting-input-group { 
+            display: flex; 
+            gap: 16px; 
+            align-items: center; 
+        }
+        .greeting-input-group > div:first-child { flex: 1; }
+        
+        .key-holders-list { 
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #e9ecef;
+            border-radius: 4px;
+        }
+        
+        .recovered-keys-list { margin-top: 12px; }
+        
+        .modal-actions {
+            display: flex; 
+            justify-content: flex-end; 
+            gap: 8px; 
+            margin-top: 24px;
+        }
+
+        /* Modal Forms */
+        .form-column-group {
+            display: flex; 
+            flex-direction: column; 
+            gap: 16px;
+        }
+        
+        .form-row {
+            display: flex; 
+            gap: 16px; 
+            margin-top: 16px;
+        }
+        .form-col { flex: 1; min-width: 0; }
+        
+        .share-config-row {
+            display: flex; 
+            gap: 16px; 
+            align-items: flex-end; 
+            margin-bottom: 16px;
+        }
+        .share-config-action { flex: 0 0 auto; }
+        .share-config-copy-action { 
+            flex: 0 0 auto; 
+            display: flex; 
+            align-items: flex-end; 
+        }
+        
+        .file-preview-header { display: flex; align-items: center; }
+
+        .modal-file-remove {
+            color: var(--danger); 
+            cursor: pointer; 
+            padding-left: 8px;
+        }
+
+        .dist-card { padding: 20px; margin-bottom: 24px; }
+        .dist-card-admin { border-left: 4px solid var(--text-main); background: #fff; }
+        
+        /* Share Row Styles */
+        .share-index { 
+            font-weight: 600; 
+            color: var(--text-muted); 
+            width: 24px; 
+        }
+        .share-cell { flex: 1; }
+        .share-name-label { font-weight: 500; }
+        .share-value-code { font-size: 12px; color: var(--text-muted); }
+        .share-copy-btn { padding: 2px 8px; font-size: 11px; }
+
+        /* File Template Styles */
+        .file-download-link { margin-right: 10px; font-size: 12px; }
+        .file-remove-btn { padding: 4px 8px; font-size: 12px; margin-bottom: 0; }
+
+        /* Global Settings Description */
+        .settings-desc { margin: 0; font-size: 0.9rem; }
+
+        /* Add Card Icon */
+        .add-card-icon { margin-bottom: 12px; opacity: 0.5; }
+
+        /* Files Title */
+        .files-section-title { margin-top: 24px; }
+
+        /* Empty State */
+        .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
+        .empty-state-hint { font-size: 0.9em; }
+
+        /* Modal File Drop Zone */
+        .file-drop-zone {
+            border: 2px dashed var(--border); 
+            padding: 20px; 
+            text-align: center; 
+            border-radius: 8px; 
+            cursor: pointer;
+        }
+        .file-drop-hint { margin-bottom: 8px; }
+        .modal-file-list { text-align: left; margin-top: 8px; }
+
+        /* Access Control Section */
+        .access-control-title {
+            margin-top: 24px; 
+            border-top: 1px solid var(--border); 
+            padding-top: 24px;
+        }
+
+        /* Master Key Input Group */
+        .master-key-label { display: block; font-size: 0.8em; margin-bottom: 4px; }
+        .master-key-wrapper { display: flex; }
+        .master-key-input {
+            width: 120px; 
+            font-family: monospace; 
+            background: #eee; 
+            border-radius: 4px 0 0 4px; 
+            border-right: none;
+        }
+        .master-key-copy-btn { border-radius: 0 4px 4px 0; padding: 0 8px; }
+
+        /* Share Table Container */
+        .share-table-container {
+            background: var(--background); 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+            overflow: hidden;
+        }
+
+        /* Modal Spacer */
+        .modal-spacer { flex: 1; }
+        
+        .code-block { 
+            margin-top: 12px; 
+            background: #f8fafc; 
+            padding: 12px; 
+            border-radius: 6px; 
+            font-family: monospace; 
+            font-size: 13px; 
+            white-space: pre-wrap; 
+            color: var(--text-muted); 
+        }
+        
+        .file-item {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 4px 0; 
+            border-bottom: 1px solid #eee;
+        }
+
+        .share-row-modal {
+            display: flex; 
+            padding: 12px; 
+            border-bottom: 1px solid var(--border); 
+            align-items: center; 
+            gap: 12px;
+        }
+
+        .share-row-read-only {
+            display: flex; 
+            padding: 8px; 
+            border-bottom: 1px solid #eee; 
+            align-items: center; 
+            gap: 12px;
+        }
+        
+        .keys-details {
+            margin-top: 24px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 12px;
+        }
+        
+        .keys-summary {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .bulk-unlock-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .bulk-unlock-card {
+            width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: var(--surface);
+        }
+        /* File List Styling */
+        .file-list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .file-list-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+        
+        .file-list-item:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            text-decoration: none;
+        }
+        
+        .file-icon {
+            margin-right: 12px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+        
+        .file-info {
+            flex: 1;
+            min-width: 0; 
+        }
+        
+        .file-name {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+        
+        .file-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .file-action-icon {
+            margin-left: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Semantic Refactoring Classes */
+        .lang-selector {
+            position: absolute; 
+            top: 16px; 
+            right: 16px; 
+            z-index: 100;
+        }
+
+        .lang-select-input {
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            border: 1px solid var(--border); 
+            background: var(--surface); 
+            color: var(--text-main);
+        }
+        
+        .main-greeting-container {
+            margin-top: 16px; 
+            padding-top: 16px; 
+            border-top: 1px solid #eee;
+        }
+
+        .main-intro-list {
+            margin-left: 20px; 
+            margin-top: 8px; 
+            margin-bottom: 16px;
+        }
+
+        .decrypt-guide-text {
+            margin-bottom: 16px; 
+            color: #666;
+        }
+
+        .admin-header {
+            margin-bottom: 32px;
+        }
+
+        .admin-global-settings {
+            margin-bottom: 16px;
+        }
+        
+        .admin-section-title {
+            margin-top: 32px;
+        }
+
+        .dist-section {
+            margin-top: 48px;
+        }
+        
+        .dist-header {
+            border-top: 1px solid var(--border); 
+            padding-top: 24px;
+        }
+
+        .dist-person-name {
+            margin: 0;
+        }
+        
+        .dist-copy-btn {
+            padding: 6px 12px; 
+            font-size: 12px;
+        }
+
+        .vault-card-header {
+            margin-bottom: 12px;
+        }
+
+        .vault-card-title {
+            font-size: 1.2rem; 
+            margin-bottom: 8px;
+        }
+
+        .vault-card-desc {
+            font-size: 0.9rem; 
+            margin-bottom: 16px;
+        }
+        
+        .vault-card-meta {
+            font-size: 0.85rem; 
+            color: var(--text-muted); 
+            display: flex; 
+            align-items: center; 
+            gap: 6px;
+        }
+
+        .share-name-input {
+            border: none; 
+            padding: 4px; 
+            font-weight: 500; 
+            width: 100%;
+        }
+
+        .share-value-display {
+            font-family: monospace; 
+            font-size: 12px; 
+            background: #f8fafc; 
+            border: none; 
+            color: var(--text-muted); 
+            width: 100%;
+        }
+
+        /* Back Button */
+        .back-btn {
+            margin-bottom: 16px;
+        }
+
+        /* Vault Description (in decrypted view) */
+        .vault-description {
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        /* Available Vaults (Main View) */
+        #content-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .content-item {
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s;
+        }
+
+        .content-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+
+        .content-name {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+        }
+
+        .content-meta {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .content-desc {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Unlock Modal */
+        .unlock-input-row {
+            margin-bottom: 16px;
+        }
+
+        /* Share Table Container */
+        .share-table-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Status Badges */
+        .badge-available {
+            background: #28a745;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-left: 5px;
+        }
+
+        .badge-pending {
+            background: #6c757d;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-left: 5px;
+        }
+
+        /* Hint Text */
+        .hint-text {
+            font-style: italic;
+            opacity: 0.7;
+        }
     </style>
 </head>
 
 <body>
+    <div class="lang-selector-container lang-selector">
+        <select id="lang-select" onchange="ui.setLanguage(this.value)" class="lang-select-input">
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+        </select>
+    </div>
     <div class="container">
         <!-- Main View Templates -->
         <div id="main-view">
@@ -186,15 +682,15 @@
                 <h1 data-i18n="app.title">Secure Instructions</h1>
                 <p data-i18n="app.description">This application allows you to access encrypted content that requires
                     multiple passwords to decrypt. Select a content item below and follow the instructions.</p>
-                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #eee;">
+                <div id="main-greeting-container" class="main-greeting-container">
                     <p data-i18n="app.intro">So, you received this file and a password? Here is what to do:</p>
-                    <ol style="margin-left: 20px; margin-top: 8px; margin-bottom: 16px;">
-                        <li>Look at the "Available Contents" list below.</li>
-                        <li>Click "Access Content" on the item you want to open.</li>
-                        <li>Enter the passwords you were given. You need enough different passwords from different people to unlock it.</li>
+                    <ol class="main-intro-list">
+                        <li data-i18n="app.step1">Look at the "Available Contents" list below.</li>
+                        <li data-i18n="app.step2">Click "Access Content" on the item you want to open.</li>
+                        <li data-i18n="app.step3">Enter the passwords you were given. You need enough different passwords from different people to unlock it.</li>
                     </ol>
-                    <button class="btn btn-secondary" onclick="window.location.hash = '#admin'" data-i18n="app.create">Create New Vault</button>
                  </div>
+                 <button id="main-create-btn" class="btn btn-secondary" onclick="window.location.hash = '#admin'" data-i18n="app.create">Create New Vault</button>
             </div>
 
             <div class="card">
@@ -209,7 +705,7 @@
                 <button class="btn btn-secondary" onclick="showMainView()" data-i18n="common.back">Back</button>
                 <h2 id="decrypt-title"></h2>
                 <p id="decrypt-description"></p>
-                <p style="margin-bottom: 16px; color: #666;" data-i18n="decrypt.guide">Enter the password shares you have collected below. The order does not matter.</p>
+                <p class="decrypt-guide-text" data-i18n="decrypt.guide">Enter the password shares you have collected below. The order does not matter.</p>
                 <div id="decrypt-messages"></div>
 
                 <div id="password-inputs"></div>
@@ -220,107 +716,180 @@
         <!-- Decrypted Content View -->
         <div id="content-view" class="hidden">
             <div class="card">
-                <button class="btn btn-secondary" onclick="showMainView()" data-i18n="common.back">Back</button>
+                <button class="btn btn-secondary back-btn" onclick="showMainView()" data-i18n="common.back">Back</button>
                 <h2 id="content-title"></h2>
+                <p id="content-description" class="vault-description"></p>
                 <div id="content-text"></div>
-                <h3 data-i18n="files.title">Files</h3>
-                <ul id="content-files" class="file-list"></ul>
+                <h3 data-i18n="files.title" class="files-section-title">Files</h3>
+                <div id="content-files" class="file-list-container"></div>
+                <div id="recovered-keys-container"></div>
             </div>
         </div>
 
-        <!-- Admin View -->
-        <div id="admin-view" class="hidden">
+        <!-- Admin Dashboard (Secure Assembler) -->
+        <div id="admin-dashboard-view" class="hidden">
+            <!-- Header -->
+            <div class="admin-header">
+                <div>
+                    <h2 data-i18n="admin.dashboardTitle">Secure Assembler</h2>
+                    <p data-i18n="admin.dashboardSubtitle">Manage content and generate distribution keys.</p>
+                </div>
+                <div class="admin-actions">
+                    <button id="btn-unlock-all" class="btn btn-secondary" onclick="unlockAllVaults()" data-i18n="admin.unlockAll">
+                        Unlock All / Enter Keys
+                    </button>
+                    <button class="btn btn-secondary" onclick="exitAdmin()" data-i18n="admin.exit">
+                        Exit Admin
+                    </button>
+
+                    <button class="btn btn-success" onclick="downloadSecureFile()" data-i18n="admin.export">
+                        Export Secure File
+                    </button>
+                </div>
+            </div>
+
+            <!-- Global Settings Widget -->
             <div class="card">
-                <h1 data-i18n="admin.title">Admin Interface</h1>
-                <div class="admin-nav">
-                    <button class="btn" onclick="showAdminList()" data-i18n="admin.listContents">List Contents</button>
-                    <button class="btn" onclick="showCreateContent()" data-i18n="admin.createContent">Create
-                        Content</button>
-                    <button class="btn btn-secondary" onclick="exitAdmin()" data-i18n="admin.exit">Exit Admin</button>
+                <div class="admin-global-settings">
+                    <h3 data-i18n="admin.globalGreeting">Global Greeting</h3>
+                    <p class="settings-desc" data-i18n="admin.shownToAll">Shown to all recipients.</p>
+                </div>
+                <div class="greeting-input-group">
+                    <div>
+                        <label data-i18n="admin.greetingLabel">Greeting Text (Use {names} for auto-list)</label>
+                        <input type="text" id="global-greeting-input" data-i18n="admin.greetingPlaceholder" placeholder="Hello {names}, here are your keys..." oninput="updateGlobalGreeting(this.value)">
+                    </div>
                 </div>
             </div>
 
-            <!-- Admin Content List -->
-            <div id="admin-list" class="card">
-                <h2 data-i18n="admin.contentList">Content Management</h2>
-                <div id="admin-content-list"></div>
+            <!-- Vaults Grid -->
+            <div>
+                <h3 class="admin-section-title" data-i18n="admin.secureVaults">Secure Vaults</h3>
+                <div class="dashboard-grid" id="dashboard-vaults-grid">
+                    <!-- Add Content Card -->
+                    <div class="vault-add-card" onclick="openVaultEditor(null)">
+                        <svg class="add-card-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        <span data-i18n="admin.createVaultCard">Create New Vault</span>
+                    </div>
+                    <!-- Vault items will be rendered here -->
+                </div>
             </div>
-
-            <!-- Create/Edit Content -->
-            <div id="admin-editor" class="card hidden">
-                <h2 id="editor-title" data-i18n="admin.createNew">Create New Content</h2>
-                <div id="editor-messages"></div>
-
-                <div id="step1" class="editor-step">
-                    <h3 data-i18n="admin.step1">Step 1: Basic Information</h3>
-                    <div class="form-group">
-                        <label data-i18n="admin.contentName" for="edit-name">Content Name:</label>
-                        <input type="text" id="edit-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label data-i18n="admin.description" for="edit-description">Description:</label>
-                        <textarea id="edit-description" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label data-i18n="admin.totalShares" for="edit-total-shares">Total Number of Password
-                            Shares:</label>
-                        <input type="number" id="edit-total-shares" min="2" max="10" value="5" required>
-                    </div>
-                    <div class="form-group">
-                        <label data-i18n="admin.requiredShares" for="edit-required-shares">Required Shares to
-                            Decrypt:</label>
-                        <input type="number" id="edit-required-shares" min="2" max="10" value="3" required>
-                        <p style="font-size: 13px; color: #666; margin-top: 4px;">
-                            <strong>Total Shares:</strong> How many different passwords to create.<br>
-                            <strong>Required Shares:</strong> How many of those are needed to unlock the file.
-                        </p>
-                    </div>
-                    <button class="btn" onclick="generateShares()" data-i18n="admin.generateShares">Generate
-                        Shares</button>
-                </div>
-
-                <div id="step2" class="editor-step hidden">
-                    <h3 data-i18n="admin.step2">Step 2: Generated Shares</h3>
-                    <div class="form-group">
-                        <label data-i18n="admin.masterKey" for="master-key">Master Key (save this securely):</label>
-                        <textarea id="master-key" readonly></textarea>
-                        <p style="font-size: 13px; color: #d63384; margin-top: 4px; font-weight: bold;">
-                            This Master Key allows you to re-open and edit this document later. It is mathematically equivalent to combining all shares. Keep it safe!
-                        </p>
-                    </div>
-                    <div id="shares-list"></div>
-                    <div style="background: #e2e3e5; padding: 12px; border-radius: 4px; margin-bottom: 16px;">
-                        <strong>IMPORTANT:</strong> You must copy and distribute these shares to your trusted contacts NOW.
-                        They are not stored anywhere else. If you lose them and the Master Key, the data will be lost forever.
-                    </div>
-                    <button class="btn" onclick="proceedToContent()" data-i18n="admin.proceedToContent">Proceed to
-                        Content</button>
-                </div>
-
-                <div id="step3" class="editor-step hidden">
-                    <h3 data-i18n="admin.step3">Step 3: Content</h3>
-                    <div class="form-group">
-                        <label data-i18n="admin.instructionText" for="edit-text">Instruction Text (encrypted):</label>
-                        <textarea id="edit-text"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label data-i18n="admin.uploadFiles">Upload Files:</label>
-                        <input type="file" id="file-input" multiple>
-                    </div>
-                    <div id="file-preview"></div>
-                    <div style="margin-bottom: 16px; padding: 12px; background: #d1ecf1; border-radius: 4px; color: #0c5460;">
-                        Clicking "Save Content" will generate and download a <strong>new HTML file</strong>.
-                        You must distribute this new file to your recipients. The current file you are looking at will not be changed.
-                    </div>
-                    <div id="save-error-message" class="error hidden" style="margin-bottom: 16px;">
-                        Cannot save changes because the original source file could not be read. Please ensure you are serving this file via a web server (e.g., `python -m http.server`).
-                    </div>
-                    <button id="btn-save-content" class="btn" onclick="saveContent()" data-i18n="admin.save">Save Content</button>
-                    <button class="btn btn-secondary" onclick="cancelEdit()" data-i18n="common.cancel">Cancel</button>
-                </div>
+            
+            <!-- Distribution Center -->
+            <div class="dist-section">
+                  <h3 class="dist-header" data-i18n="admin.distributionCenter">Distribution Center</h3>
+                  <p data-i18n="admin.distributionDesc">Copy these messages to send to each person.</p>
+                  <div id="distribution-center-list">
+                      <!-- Person Cards will go here -->
+                  </div>
             </div>
         </div>
     </div>
+
+
+    <!-- Templates -->
+    <template id="tmpl-content-item">
+        <div class="content-item">
+            <h3 class="content-name"></h3>
+            <div class="content-meta"></div>
+            <p class="content-desc"></p>
+            <button class="btn btn-access" data-i18n="app.access">Access Content</button>
+        </div>
+    </template>
+
+    <template id="tmpl-admin-content-item">
+        <div class="content-item">
+            <h3 class="content-name"></h3>
+            <div class="content-meta"></div>
+            <p class="content-desc"></p>
+            <button class="btn btn-edit" data-i18n="common.edit">Edit</button>
+            <button class="btn btn-danger btn-delete" data-i18n="common.delete">Delete</button>
+        </div>
+    </template>
+
+    <template id="tmpl-file-preview">
+        <div class="file-item">
+            <div class="file-preview-header">
+                <span class="file-name-type"></span>
+                <span class="file-badge badge"></span>
+            </div>
+            <div>
+                <a class="file-download-link" target="_blank">Download</a>
+                <button type="button" class="btn btn-danger file-remove-btn">Remove</button>
+            </div>
+        </div>
+    </template>
+
+    <template id="tmpl-vault-card">
+        <div class="vault-card">
+            <div class="vault-card-header">
+                <span class="badge vault-card-badge"></span>
+            </div>
+            <h3 class="vault-card-title"></h3>
+            <p class="vault-card-desc"></p>
+            <div class="vault-card-meta">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                <span class="vault-card-owners"></span>
+            </div>
+        </div>
+    </template>
+
+    <template id="tmpl-share-row-modal">
+        <div class="share-row-modal">
+            <span class="share-index"></span>
+            <div class="share-cell">
+                <input type="text" list="all-share-names" class="share-name-input-modal share-name-input" data-i18n="share.placeholder" placeholder="Person Name (e.g. Alice)">
+            </div>
+            <div class="share-cell">
+                <input type="text" class="share-value-input share-value-display" readonly>
+            </div>
+            <button class="btn btn-secondary share-copy-btn" data-i18n="common.copy">Copy</button>
+        </div>
+    </template>
+    
+    <template id="tmpl-dist-personal">
+        <div class="card dist-card">
+            <h3 class="dist-person-name"></h3>
+            <button class="btn btn-secondary dist-copy-email-btn dist-copy-btn" data-i18n="dist.copyEmail">Copy Email</button>
+            <div class="code-block dist-email-text"></div>
+        </div>
+    </template>
+    
+    <template id="tmpl-dist-admin">
+        <div class="card dist-card dist-card-admin">
+             <h3 class="text-main dist-person-name" data-i18n="dist.adminKeys">Admin / Master Keys</h3>
+             <button class="btn btn-secondary dist-copy-keys-btn dist-copy-btn" data-i18n="dist.copyKeys">Copy Keys</button>
+             <div class="code-block dist-keys-text"></div>
+        </div>
+    </template>
+
+    <template id="tmpl-decrypted-file">
+        <a class="file-list-item" target="_blank">
+            <div class="file-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+            </div>
+            <div class="file-info">
+                <span class="file-name"></span>
+                <span class="file-meta"></span>
+            </div>
+            <div class="file-action-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </div>
+        </a>
+    </template>
+
+    <template id="tmpl-recovered-key">
+        <div class="share-row-read-only">
+            <span class="share-index"></span>
+            <div class="share-cell">
+                <span class="share-name share-name-label"></span>
+            </div>
+            <div class="share-cell">
+                <code class="share-value share-value-code"></code>
+            </div>
+            <button class="btn btn-secondary share-copy-btn" data-i18n="common.copy">Copy</button>
+        </div>
+    </template>
 
     <script>/*! secrets.js-grempe 2019-09-07 */
 
@@ -330,6 +899,9 @@
         // Application State
         let appData = {
             contents: [],
+            settings: {
+                greeting: '' // Default greeting override
+            },
             currentContent: null,
             isAdmin: false,
             editingId: null
@@ -351,6 +923,7 @@
                 'admin.title': 'Admin Interface',
                 'admin.listContents': 'List Contents',
                 'admin.createContent': 'Create Content',
+                'admin.globalSettings': 'Global Settings',
                 'admin.exit': 'Exit Admin',
                 'admin.contentList': 'Content Management',
                 'admin.createNew': 'Create New Content',
@@ -368,8 +941,327 @@
                 'admin.uploadFiles': 'Upload Files:',
                 'admin.save': 'Save Content',
                 'app.intro': 'So, you received this file and a password? Here is what to do:',
+                'app.step1': 'Look at the \"Available Contents\" list below.',
+                'app.step2': 'Click \"Access Content\" on the item you want to open.',
+                'app.step3': 'Enter the passwords you were given. You need enough different passwords from different people to unlock it.',
                 'app.create': 'Create New Vault',
-                'decrypt.guide': 'Enter the password shares you have collected below. The order does not matter.'
+                'decrypt.guide': 'Enter the password shares you have collected below. The order does not matter.',
+                'admin.settings.title': 'Global Settings',
+                'admin.settings.greeting': 'Custom Greeting Text:',
+                'admin.settings.greetingPlaceholder': 'Leave empty to use the default greeting...',
+                'admin.settings.save': 'Save Settings',
+                'app.access': 'Access Content',
+                'dist.copyEmail': 'Copy Email',
+                'dist.copyKeys': 'Copy Keys',
+                'dist.adminKeys': 'Admin / Master Keys',
+                'dist.to': 'To:',
+                'dist.clickCopy': '(click Copy to get full text)',
+                'share.placeholder': 'Person Name (e.g. Alice)',
+                'dist.noPlan': 'No distribution plans generated yet.',
+                'dist.createVaults': 'Create vaults and assign names to see your distribution list here.',
+                'common.edit': 'Edit',
+                'common.delete': 'Delete',
+                'content.requirements': 'Requires {req} of {total} passwords',
+                'prompt.enterMasterKey': 'Enter master key to edit this content:',
+                'error.invalidMasterKey': 'Invalid master key or corrupted content',
+                'error.nameRequired': 'Name and Secret Message are required.',
+                'error.enterPasswords': 'Please enter all required passwords',
+                'decrypt.viewKeys': 'View Original Keys (Restored)',
+                'decrypt.noFiles': 'No files attached',
+                'admin.dashboardTitle': 'Secure Assembler',
+                'admin.dashboardSubtitle': 'Manage content and generate distribution keys.',
+                'admin.unlockAll': 'Unlock All / Enter Keys',
+                'admin.export': 'Export Secure File',
+                'admin.globalGreeting': 'Global Greeting',
+                'admin.shownToAll': 'Shown to all recipients.',
+                'admin.greetingLabel': 'Greeting Text (Use {names} for auto-list)',
+                'admin.secureVaults': 'Secure Vaults',
+                'admin.createVaultCard': 'Create New Vault',
+                'admin.distributionCenter': 'Distribution Center',
+                'admin.distributionDesc': 'Copy these messages to send to each person.',
+                'unlock.title': 'Enter Master Keys',
+                'unlock.description': 'Enter the master key for each vault to generate distribution messages.',
+                'unlock.confirm': 'Unlock All',
+                'unlock.placeholder': 'Enter Master Key',
+                'editor.titleEdit': 'Edit Vault',
+                'editor.titleNew': 'New Vault',
+                'editor.vaultName': 'Vault Name',
+                'editor.vaultDesc': 'Description (Visible to public)',
+                'editor.secretMessage': 'Secret Message',
+                'editor.secretPlaceholder': 'Type your secret instructions here...',
+                'editor.files': 'Files (Drag & Drop or Click)',
+                'editor.shareConfig': 'Share Configuration',
+                'editor.totalShares': 'Total Shares',
+                'editor.requiredShares': 'Required Shares',
+                'editor.masterKey': 'Master Key',
+                'editor.generatedShares': 'Generated Shares',
+                'editor.regenerate': 'Regenerate',
+                'editor.save': 'Save Vault',
+                'editor.delete': 'Delete Vault',
+                'error.noContent': 'No content to save.',
+                'success.generated': 'Updated file generated and downloaded!',
+                'error.adminHttps': 'Admin interface is only available when served via HTTP/HTTPS server...',
+                'confirm.deleteVault': 'Delete this vault?',
+                'confirm.alreadyUnlocked': 'All vaults are already unlocked. Do you want to re-enter keys?',
+                'error.noVaults': 'No vaults to unlock.',
+                'app.noContent': 'No content available.',
+                'dist.noContent': 'No content to distribute.',
+                'dist.unlockHint': 'Use "Unlock All" above to enter master keys for all vaults to generate distribution messages.',
+                'dist.locked': 'Locked (Enter Master Key to view distribution info)',
+                'dist.caution': '[CAUTION: This text contains the SECRET KEYS for "{name}". Handle with care!]',
+                'dist.step1': 'Download the HTML file and send it as an attachment to everyone.',
+                'dist.step2': 'Then, send each person their unique key separately.',
+                'dist.noShares': 'No shares found in this content.',
+                'dist.keyIntro': 'YOUR UNIQUE ACCESS KEY:',
+                'dist.keysIntro': 'Here are your unique keys:',
+                'dist.keepSafe': 'Keep these safe! You will need them to unlock the files.',
+                'dist.defaultGreeting': 'Here is the Secure Vault file.',
+                'dist.adminKeysTitle': 'ADMIN MASTER KEYS (KEEP SAFE!)',
+                'editor.vaultNamePlaceholder': 'e.g. Bank Accounts',
+                'editor.vaultDescPlaceholder': 'Details about what is inside...',
+                'admin.greetingPlaceholder': 'Hello {names}, here are your keys...',
+                'editor.dropFiles': 'Click or Drop files here',
+                'common.copy': 'Copy',
+                'common.copied': 'Copied!',
+                'decrypt.keyHolders': 'Key Holders:',
+                'decrypt.enterShareKey': 'Enter any valid share key',
+                'decrypt.shareLabel': 'Share #{n}:',
+                'admin.sharesBadge': 'Shares',
+                'admin.noOwners': 'No owners assigned'
+            },
+            fr: {
+                'app.title': 'Instructions Sécurisées',
+                'app.description': 'Cette application vous permet d\'accéder à du contenu crypté nécessitant plusieurs mots de passe pour être déchiffré. Sélectionnez un élément ci-dessous et suivez les instructions.',
+                'contents.title': 'Contenus Disponibles',
+                'decrypt.button': 'Déchiffrer le Contenu',
+                'files.title': 'Fichiers',
+                'common.back': 'Retour',
+                'common.cancel': 'Annuler',
+                'admin.title': 'Interface Administrateur',
+                'admin.listContents': 'Liste des Contenus',
+                'admin.createContent': 'Créer un Contenu',
+                'admin.globalSettings': 'Paramètres Globaux',
+                'admin.exit': 'Quitter l\'Admin',
+                'admin.contentList': 'Gestion de Contenu',
+                'admin.createNew': 'Créer Nouveau Contenu',
+                'admin.step1': 'Étape 1: Informations de Base',
+                'admin.contentName': 'Nom du Contenu:',
+                'admin.description': 'Description:',
+                'admin.totalShares': 'Nombre Total de Parts:',
+                'admin.requiredShares': 'Parts Requises pour Déchiffrer:',
+                'admin.generateShares': 'Générer les Parts',
+                'admin.step2': 'Étape 2: Parts Générées',
+                'admin.masterKey': 'Clé Maître (sauvegardez-la en lieu sûr):',
+                'admin.proceedToContent': 'Procéder au Contenu',
+                'admin.step3': 'Étape 3: Contenu',
+                'admin.instructionText': 'Texte d\'Instruction (chiffré):',
+                'admin.uploadFiles': 'Télécharger des Fichiers:',
+                'admin.save': 'Sauvegarder le Contenu',
+                'app.intro': 'Vous avez reçu ce fichier et un mot de passe ? Voici ce qu\'il faut faire :',
+                'app.step1': 'Regardez la liste "Contenus Disponibles" ci-dessous.',
+                'app.step2': 'Cliquez sur "Accéder au Contenu" sur l\'élément que vous voulez ouvrir.',
+                'app.step3': 'Entrez les mots de passe qui vous ont été donnés. Vous avez besoin de suffisamment de mots de passe différents de personnes différentes.',
+                'app.create': 'Créer un Nouveau Coffre-fort',
+                'decrypt.guide': 'Entrez les parts de mot de passe que vous avez collectées ci-dessous. L\'ordre n\'a pas d\'importance.',
+                'admin.settings.title': 'Paramètres Globaux',
+                'admin.settings.greeting': 'Texte d\'Accueil Personnalisé :',
+                'admin.settings.greetingPlaceholder': 'Laisser vide pour utiliser le texte par défaut...',
+                'admin.settings.save': 'Sauvegarder les Paramètres',
+                'app.access': 'Accéder au Contenu',
+                'dist.copyEmail': 'Copier l\'Email',
+                'dist.copyKeys': 'Copier les Clés',
+                'dist.adminKeys': 'Clés Maître / Admin',
+                'dist.to': 'À:',
+                'dist.clickCopy': '(cliquer sur Copier pour voir tout)',
+                'share.placeholder': 'Nom de la Personne (ex: Alice)',
+                'dist.noPlan': 'Aucun plan de distribution généré.',
+                'dist.createVaults': 'Créez des coffres-forts et assignez des noms pour voir votre liste ici.',
+                'common.edit': 'Éditer',
+                'common.delete': 'Supprimer',
+                'content.requirements': 'Nécessite {req} sur {total} mots de passe',
+                'prompt.enterMasterKey': 'Entrez la clé maître pour éditer ce contenu :',
+                'error.invalidMasterKey': 'Clé maître invalide ou contenu corrompu',
+                'error.nameRequired': 'Le nom et le message secret sont requis.',
+                'error.enterPasswords': 'Veuillez entrer tous les mots de passe requis',
+                'decrypt.viewKeys': 'Voir les Clés Originales (Restaurées)',
+                'decrypt.noFiles': 'Aucun fichier joint',
+                'admin.dashboardTitle': 'Assembleur Sécurisé',
+                'admin.dashboardSubtitle': 'Gérer le contenu et générer les clés de distribution.',
+                'admin.unlockAll': 'Tout Déverrouiller / Entrer Clés',
+                'admin.export': 'Exporter le Fichier Sécurisé',
+                'admin.globalGreeting': 'Salutation Globale',
+                'admin.shownToAll': 'Affiché à tous les destinataires.',
+                'admin.greetingLabel': 'Texte de Salutation (Utilisez {names} pour la liste auto)',
+                'admin.secureVaults': 'Coffres-forts Sécurisés',
+                'admin.createVaultCard': 'Créer un Nouveau Coffre',
+                'admin.distributionCenter': 'Centre de Distribution',
+                'admin.distributionDesc': 'Copiez ces messages pour les envoyer à chaque personne.',
+                'unlock.title': 'Entrer les Clés Maîtres',
+                'unlock.description': 'Entrez la clé maître pour chaque coffre pour générer les messages.',
+                'unlock.confirm': 'Tout Déverrouiller',
+                'unlock.placeholder': 'Entrer la Clé Maître',
+                'editor.titleEdit': 'Éditer le Coffre',
+                'editor.titleNew': 'Nouveau Coffre',
+                'editor.vaultName': 'Nom du Coffre',
+                'editor.vaultDesc': 'Description (Visible au public)',
+                'editor.secretMessage': 'Message Secret',
+                'editor.secretPlaceholder': 'Tapez vos instructions secrètes ici...',
+                'editor.files': 'Fichiers (Glisser-déposer ou Clic)',
+                'editor.shareConfig': 'Configuration du Partage',
+                'editor.totalShares': 'Total des Parts',
+                'editor.requiredShares': 'Parts Requises',
+                'editor.masterKey': 'Clé Maître',
+                'editor.generatedShares': 'Parts Générées',
+                'editor.regenerate': 'Régénérer',
+                'editor.save': 'Sauvegarder le Coffre',
+                'editor.delete': 'Supprimer le Coffre',
+                'error.noContent': 'Aucun contenu à sauvegarder.',
+                'success.generated': 'Fichier mis à jour généré et téléchargé !',
+                'error.adminHttps': 'L\'interface admin n\'est disponible que via serveur HTTP/HTTPS...',
+                'confirm.deleteVault': 'Supprimer ce coffre ?',
+                'confirm.alreadyUnlocked': 'Tout est déjà déverrouillé. Voulez-vous ré-entrer les clés ?',
+                'error.noVaults': 'Aucun coffre à déverrouiller.',
+                'app.noContent': 'Aucun contenu disponible.',
+                'dist.noContent': 'Aucun contenu à distribuer.',
+                'dist.unlockHint': 'Utilisez "Tout Déverrouiller" ci-dessus pour entrer les clés pour tous les coffres.',
+                'dist.locked': 'Verrouillé (Entrez la Clé Maître pour voir les infos)',
+                'dist.caution': '[ATTENTION: Ce texte contient les CLÉS SECRÈTES pour "{name}". Manipulez avec précaution !]',
+                'dist.step1': 'Téléchargez le fichier HTML et envoyez-le en pièce jointe à tout le monde.',
+                'dist.step2': 'Ensuite, envoyez à chaque personne sa clé unique séparément.',
+                'dist.noShares': 'Aucune part trouvée dans ce contenu.',
+                'dist.keyIntro': 'VOTRE CLÉ D\'ACCÈS UNIQUE :',
+                'dist.keysIntro': 'Voici vos clés uniques :',
+                'dist.keepSafe': 'Gardez-les en sécurité ! Vous en aurez besoin pour déverrouiller les fichiers.',
+                'dist.defaultGreeting': 'Voici le fichier du Coffre Sécurisé.',
+                'dist.adminKeysTitle': 'CLÉS MAÎTRES ADMIN (GARDER EN SÉCURITÉ !)',
+                'editor.vaultNamePlaceholder': 'ex: Comptes Bancaires',
+                'editor.vaultDescPlaceholder': 'Détails sur ce qui est à l\'intérieur...',
+                'admin.greetingPlaceholder': 'Bonjour {names}, voici vos clés...',
+                'editor.dropFiles': 'Cliquez ou Glissez-déposez des fichiers ici',
+                'common.copy': 'Copier',
+                'common.copied': 'Copié !',
+                'decrypt.keyHolders': 'Détenteurs de Clés :',
+                'decrypt.enterShareKey': 'Entrez une clé de partage valide',
+                'decrypt.shareLabel': 'Part #{n} :',
+                'admin.sharesBadge': 'Parts',
+                'admin.noOwners': 'Aucun propriétaire'
+            },
+            de: {
+                'app.title': 'Sichere Anweisungen',
+                'app.description': 'Diese Anwendung ermöglicht den Zugriff auf verschlüsselte Inhalte, die mehrere Passwörter zum Entschlüsseln erfordern. Wählen Sie unten einen Inhalt aus und folgen Sie den Anweisungen.',
+                'contents.title': 'Verfügbare Inhalte',
+                'decrypt.button': 'Inhalt Entschlüsseln',
+                'files.title': 'Dateien',
+                'common.back': 'Zurück',
+                'common.cancel': 'Abbrechen',
+                'admin.title': 'Admin-Oberfläche',
+                'admin.listContents': 'Inhalte Auflisten',
+                'admin.createContent': 'Inhalt Erstellen',
+                'admin.globalSettings': 'Globale Einstellungen',
+                'admin.exit': 'Admin Beenden',
+                'admin.contentList': 'Inhaltsverwaltung',
+                'admin.createNew': 'Neuen Inhalt Erstellen',
+                'admin.step1': 'Schritt 1: Basis-Informationen',
+                'admin.contentName': 'Inhaltsname:',
+                'admin.description': 'Beschreibung:',
+                'admin.totalShares': 'Gesamtzahl der Passwort-Anteile:',
+                'admin.requiredShares': 'Erforderliche Anteile zum Entschlüsseln:',
+                'admin.generateShares': 'Anteile Generieren',
+                'admin.step2': 'Schritt 2: Generierte Anteile',
+                'admin.masterKey': 'Hauptschlüssel (sicher aufbewahren):',
+                'admin.proceedToContent': 'Weiter zum Inhalt',
+                'admin.step3': 'Schritt 3: Inhalt',
+                'admin.instructionText': 'Anweisungstext (verschlüsselt):',
+                'admin.uploadFiles': 'Dateien Hochladen:',
+                'admin.save': 'Inhalt Speichern',
+                'app.intro': 'Sie haben diese Datei und ein Passwort erhalten? Hier ist, was zu tun ist:',
+                'app.step1': 'Sehen Sie sich die Liste \"Verf\u00fcgbare Inhalte\" unten an.',
+                'app.step2': 'Klicken Sie auf \"Inhalt Zugreifen\" bei dem Eintrag, den Sie \u00f6ffnen m\u00f6chten.',
+                'app.step3': 'Geben Sie die Passw\u00f6rter ein, die Sie erhalten haben. Sie ben\u00f6tigen gen\u00fcgend verschiedene Passw\u00f6rter von verschiedenen Personen.',
+                'app.create': 'Neuen Tresor Erstellen',
+                'decrypt.guide': 'Geben Sie unten die gesammelten Passwort-Anteile ein. Die Reihenfolge ist egal.',
+                'admin.settings.title': 'Globale Einstellungen',
+                'admin.settings.greeting': 'Benutzerdefinierter Begrüßungstext:',
+                'admin.settings.greetingPlaceholder': 'Leer lassen für Standardbegrüßung...',
+                'admin.settings.save': 'Einstellungen Speichern',
+                'app.access': 'Zugriff auf Inhalt',
+                'dist.copyEmail': 'E-Mail Kopieren',
+                'dist.copyKeys': 'Schlüssel Kopieren',
+                'dist.adminKeys': 'Admin / Hauptschlüssel',
+                'dist.to': 'An:',
+                'dist.clickCopy': '(Kopieren klicken für vollen Text)',
+                'share.placeholder': 'Name der Person (z.B. Alice)',
+                'dist.noPlan': 'Noch keine Verteilungspläne generiert.',
+                'dist.createVaults': 'Erstellen Sie Tresore und weisen Sie Namen zu, um Ihre Liste hier zu sehen.',
+                'common.edit': 'Bearbeiten',
+                'common.delete': 'Löschen',
+                'content.requirements': 'Erfordert {req} von {total} Passwörtern',
+                'prompt.enterMasterKey': 'Geben Sie den Hauptschlüssel ein, um diesen Inhalt zu bearbeiten:',
+                'error.invalidMasterKey': 'Ungültiger Hauptschlüssel oder beschädigter Inhalt',
+                'error.nameRequired': 'Name und geheime Nachricht sind erforderlich.',
+                'error.enterPasswords': 'Bitte geben Sie alle erforderlichen Passwörter ein',
+                'decrypt.viewKeys': 'Originalschlüssel anzeigen (Wiederhergestellt)',
+                'decrypt.noFiles': 'Keine Dateien angehängt',
+                'admin.dashboardTitle': 'Sicherer Assembler',
+                'admin.dashboardSubtitle': 'Inhalte verwalten und Verteilungsschlüssel generieren.',
+                'admin.unlockAll': 'Alles Entsperren / Schlüssel eingeben',
+                'admin.export': 'Sichere Datei exportieren',
+                'admin.globalGreeting': 'Globale Begrüßung',
+                'admin.shownToAll': 'Allen Empfängern angezeigt.',
+                'admin.greetingLabel': 'Begrüßungstext (Verwenden Sie {names} für Auto-Liste)',
+                'admin.secureVaults': 'Sichere Tresore',
+                'admin.createVaultCard': 'Neuen Tresor erstellen',
+                'admin.distributionCenter': 'Verteilungszentrum',
+                'admin.distributionDesc': 'Kopieren Sie diese Nachrichten, um sie an jede Person zu senden.',
+                'unlock.title': 'Hauptschlüssel eingeben',
+                'unlock.description': 'Geben Sie den Hauptschlüssel für jeden Tresor ein, um Verteilungsnachrichten zu generieren.',
+                'unlock.confirm': 'Alles Entsperren',
+                'unlock.placeholder': 'Hauptschlüssel eingeben',
+                'editor.titleEdit': 'Tresor bearbeiten',
+                'editor.titleNew': 'Neuer Tresor',
+                'editor.vaultName': 'Tresorname',
+                'editor.vaultDesc': 'Beschreibung (öffentlich sichtbar)',
+                'editor.secretMessage': 'Geheime Nachricht',
+                'editor.secretPlaceholder': 'Geben Sie Ihre geheimen Anweisungen hier ein...',
+                'editor.files': 'Dateien (Drag & Drop oder Klick)',
+                'editor.shareConfig': 'Freigabe-Konfiguration',
+                'editor.totalShares': 'Gesamte Anteile',
+                'editor.requiredShares': 'Erforderliche Anteile',
+                'editor.masterKey': 'Hauptschlüssel',
+                'editor.generatedShares': 'Generierte Anteile',
+                'editor.regenerate': 'Regenerieren',
+                'editor.save': 'Tresor speichern',
+                'editor.delete': 'Tresor löschen',
+                'error.noContent': 'Kein Inhalt zum Speichern.',
+                'success.generated': 'Aktualisierte Datei erstellt und heruntergeladen!',
+                'error.adminHttps': 'Admin-Interface ist nur über HTTP/HTTPS-Server verfügbar...',
+                'confirm.deleteVault': 'Diesen Tresor löschen?',
+                'confirm.alreadyUnlocked': 'Alle Tresore sind bereits entsperrt. Möchten Sie die Schlüssel erneut eingeben?',
+                'error.noVaults': 'Keine Tresore zum Entsperren.',
+                'app.noContent': 'Kein Inhalt verfügbar.',
+                'dist.noContent': 'Kein Inhalt zum Verteilen.',
+                'dist.unlockHint': 'Verwenden Sie "Alles Entsperren" oben, um Verteilungsnachrichten zu generieren.',
+                'dist.locked': 'Gesperrt (Hauptschlüssel eingeben, um Infos zu sehen)',
+                'dist.caution': '[ACHTUNG: Dieser Text enthält die GEHEIMEN SCHLÜSSEL für "{name}". Vorsichtig behandeln!]',
+                'dist.step1': 'Laden Sie die HTML-Datei herunter und senden Sie sie als Anhang an alle.',
+                'dist.step2': 'Senden Sie dann jeder Person ihren einzigartigen Schlüssel separat.',
+                'dist.noShares': 'Keine Anteile in diesem Inhalt gefunden.',
+                'dist.keyIntro': 'IHR EINZIGARTIGER ZUGANGSSCHLÜSSEL:',
+                'dist.keysIntro': 'Hier sind Ihre einzigartigen Schlüssel:',
+                'dist.keepSafe': 'Bewahren Sie diese sicher auf! Sie werden benötigt, um die Dateien zu entsperren.',
+                'dist.defaultGreeting': 'Hier ist die sichere Tresor-Datei.',
+                'dist.adminKeysTitle': 'ADMIN-HAUPTSCHLÜSSEL (SICHER AUFBEWAHREN!)',
+                'editor.vaultNamePlaceholder': 'z.B. Bankkonten',
+                'editor.vaultDescPlaceholder': 'Details über den Inhalt...',
+                'admin.greetingPlaceholder': 'Hallo {names}, hier sind eure Schlüssel...',
+                'editor.dropFiles': 'Dateien hier klicken oder ablegen',
+                'common.copy': 'Kopieren',
+                'common.copied': 'Kopiert!',
+                'decrypt.keyHolders': 'Schlüsselinhaber:',
+                'decrypt.enterShareKey': 'Geben Sie einen gültigen Teil-Schlüssel ein',
+                'decrypt.shareLabel': 'Anteil #{n}:',
+                'admin.sharesBadge': 'Anteile',
+                'admin.noOwners': 'Keine Eigentümer'
             }
         };
 
@@ -539,15 +1431,23 @@
             },
 
             // Show error message
+            // Show error message
             showError(message, containerId = 'editor-messages') {
                 const container = document.getElementById(containerId);
-                container.innerHTML = `<div class="error">${message}</div>`;
+                if (container) {
+                    container.innerHTML = `<div class="error">${message}</div>`;
+                } else {
+                    console.error('Error (container not found):', message);
+                    alert(message);
+                }
             },
 
             // Show success message
             showSuccess(message, containerId = 'editor-messages') {
                 const container = document.getElementById(containerId);
-                container.innerHTML = `<div class="success">${message}</div>`;
+                if (container) {
+                    container.innerHTML = `<div class="success">${message}</div>`;
+                }
             },
 
             // Clear messages
@@ -557,59 +1457,57 @@
             },
 
             // Apply internationalization
-            applyI18n(lang = 'en') {
-                document.querySelectorAll('[data-i18n]').forEach(element => {
+            currentLang: 'en',
+
+            setLanguage(lang) {
+                this.currentLang = lang;
+                document.documentElement.lang = lang;
+                this.applyI18n();
+                
+                // Re-render dynamic content based on visible view
+                if (!document.getElementById('main-view').classList.contains('hidden')) {
+                    renderContentList();
+                }
+                if (!document.getElementById('admin-view').classList.contains('hidden')) {
+                    renderDashboard();
+                }
+            },
+
+            t(key) {
+                const lang = this.currentLang;
+                const texts = i18n[lang] || i18n['en'];
+                return texts[key] || key;
+            },
+            
+            applyI18n(container = document) {
+                const lang = this.currentLang;
+                const texts = i18n[lang] || i18n['en'];
+                
+                // Update elements with data-i18n attribute
+                container.querySelectorAll('[data-i18n]').forEach(element => {
                     const key = element.getAttribute('data-i18n');
-                    if (i18n[lang] && i18n[lang][key]) {
-                        element.textContent = i18n[lang][key];
+                    if (texts[key]) {
+                        if ((element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') && element.getAttribute('placeholder')) {
+                            element.placeholder = texts[key];
+                        } else {
+                            element.textContent = texts[key];
+                        }
                     }
                 });
-            }
-        };
-
-        // Test Helper
-        const TestHelper = {
-            get isActive() {
-                // Check session storage first (persists across hash changes), then URL hash
-                return sessionStorage.getItem('test_mode') === 'true' || window.location.hash.includes('test');
-            },
-
-            init() {
-                if (this.isActive || window.location.hash.includes('test')) {
-                    console.log('Test mode active');
-                    sessionStorage.setItem('test_mode', 'true');
-                    document.body.classList.add('test-mode');
-                }
-            },
-
-            prefillCreation() {
-                if (!this.isActive) return;
-                const dateStr = new Date().toLocaleTimeString();
-                document.getElementById('edit-name').value = 'Test Content ' + dateStr;
-                document.getElementById('edit-description').value = 'Auto-generated for testing purposes at ' + dateStr;
-            },
-
-            cacheShares(shares) {
-                if (!this.isActive) return;
-                sessionStorage.setItem('test_shares', JSON.stringify(shares));
-            },
-
-            autoFillDecryption(requiredShares) {
-                if (!this.isActive) return;
-                const stored = sessionStorage.getItem('test_shares');
-                if (!stored) return;
-
-                try {
-                    const shares = JSON.parse(stored);
-                    for (let i = 0; i < requiredShares && i < shares.length; i++) {
-                        const input = document.getElementById(`password-${i}`);
-                        if (input) input.value = shares[i];
+                
+                // Update elements with data-i18n-placeholder attribute (for inputs with separate text content)
+                container.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                    const key = element.getAttribute('data-i18n-placeholder');
+                    if (texts[key]) {
+                        element.placeholder = texts[key];
                     }
-                } catch (e) {
-                    console.error('Failed to auto-fill shares', e);
-                }
+                });
+                
+                // Update specific elements that might not be caught by querySelectorAll if simpler logic used before
             }
         };
+
+
 
         // Initialize application
         async function init() {
@@ -626,7 +1524,8 @@
             }
 
             loadData();
-            TestHelper.init();
+
+
 
             // Check if admin mode
             if (window.location.hash.includes('admin')) {
@@ -645,7 +1544,18 @@
                 // Try to load from embedded data first
                 const embeddedData = getEmbeddedData();
                 if (embeddedData) {
-                    appData.contents = embeddedData;
+                    // Check if it's the new format with contents and settings
+                    if (embeddedData.contents) {
+                         appData.contents = embeddedData.contents;
+                         appData.settings = embeddedData.settings || { greeting: '' };
+                    } else {
+                        // Previous versions might have just been an array, but we strictly support the object format now
+                        // or initialize empty if structure doesn't match
+                        console.warn("Unknown data format, initializing empty.");
+                        appData.contents = [];
+                        appData.settings = { greeting: '' };
+                    }
+                    
                     initialHTML = initialHTML.replace(/<script[^>]*id="embedded-data"[^>]*>[\s\S]*?<\/script>/i, '');
                     return;
                 }
@@ -674,27 +1584,73 @@
         // Main view functions
         function showMainView() {
             ui.showView('main-view');
+            
+            // Handle Greeting
+            const greetingContainer = document.getElementById('main-greeting-container');
+            const introText = document.querySelector('[data-i18n="app.intro"]');
+            
+            if (appData.contents.length === 0) {
+                 greetingContainer.classList.add('hidden');
+            } else {
+                 greetingContainer.classList.remove('hidden');
+                 if (appData.settings && appData.settings.greeting) {
+                     let greeting = appData.settings.greeting;
+                     
+                     // Collect all names
+                     let allNames = new Set();
+                     appData.contents.forEach(c => {
+                         if (c.shareNames) {
+                             c.shareNames.forEach(n => allNames.add(n));
+                         }
+                     });
+                     
+                     const namesString = Array.from(allNames).join(', ') || "Key Holders";
+                     greeting = greeting.replace(/{names}|{person}/g, namesString);
+                     
+                     if (introText) introText.textContent = greeting;
+                     // Disable i18n update for this element if custom text is set
+                     introText.removeAttribute('data-i18n');
+                 } else {
+                     // Restore default
+                     introText.setAttribute('data-i18n', 'app.intro');
+                     introText.textContent = i18n['en']['app.intro'];
+                 }
+            }
+            
             renderContentList();
         }
 
         function renderContentList() {
             const container = document.getElementById('content-list');
+            const lang = ui.currentLang;
+            const texts = i18n[lang] || i18n['en'];
 
             if (appData.contents.length === 0) {
-                container.innerHTML = '<p>No content available.</p>';
+                container.innerHTML = `<p data-i18n="app.noContent">${ui.t('app.noContent')}</p>`;
                 return;
             }
 
-            container.innerHTML = appData.contents.map(content => `
-                <div class="content-item">
-                    <h3>${escapeHtml(content.name)}</h3>
-                    <div class="content-meta">
-                        Requires ${content.requiredShares} of ${content.totalShares} passwords
-                    </div>
-                    <p>${escapeHtml(content.description)}</p>
-                    <button class="btn" onclick="startDecryption('${content.id}')">Access Content</button>
-                </div>
-            `).join('');
+            container.innerHTML = '';
+            const template = document.getElementById('tmpl-content-item');
+
+            appData.contents.forEach(content => {
+                const clone = template.content.cloneNode(true);
+                
+                const metaText = ui.t('content.requirements')
+                    .replace('{req}', content.requiredShares)
+                    .replace('{total}', content.totalShares);
+                
+                clone.querySelector('.content-name').textContent = content.name;
+                clone.querySelector('.content-meta').textContent = metaText;
+                clone.querySelector('.content-desc').textContent = content.description;
+                
+                const btn = clone.querySelector('.btn-access');
+                btn.onclick = () => startDecryption(content.id);
+                
+                container.appendChild(clone);
+            });
+            
+            ui.applyI18n(container);
         }
 
         // Decryption functions
@@ -714,19 +1670,26 @@
         function renderPasswordInputs(requiredShares) {
             const container = document.getElementById('password-inputs');
             container.innerHTML = '';
+            
+            // Show Key Holders if available
+            const content = appData.currentContent;
+            if (content.shareNames && content.shareNames.length > 0) {
+                const holdersList = document.createElement('div');
+                holdersList.className = 'key-holders-list';
+                holdersList.innerHTML = `<strong>${ui.t('decrypt.keyHolders')}</strong> ` + content.shareNames.map(escapeHtml).join(', ');
+                container.appendChild(holdersList);
+            }
 
             for (let i = 0; i < requiredShares; i++) {
                 const div = document.createElement('div');
                 div.className = 'password-input';
                 div.innerHTML = `
-                    <label>Password ${i + 1}:</label>
-                    <input type="password" id="password-${i}" required>
+                    <label>${ui.t('decrypt.shareLabel').replace('{n}', i+1)}</label>
+                    <input type="password" id="password-${i}" required placeholder="${ui.t('decrypt.enterShareKey')}" data-i18n="decrypt.enterShareKey">
                 `;
                 container.appendChild(div);
             }
 
-            // Test Helper Hook
-            TestHelper.autoFillDecryption(requiredShares);
         }
 
         async function attemptDecryption() {
@@ -738,7 +1701,7 @@
                 for (let i = 0; i < requiredShares; i++) {
                     const password = document.getElementById(`password-${i}`).value.trim();
                     if (!password) {
-                        throw new Error('Please enter all required passwords');
+                        throw new Error(ui.t('error.enterPasswords'));
                     }
                     passwords.push(password);
                 }
@@ -764,34 +1727,250 @@
             ui.showView('content-view');
 
             document.getElementById('content-title').textContent = appData.currentContent.name;
+            document.getElementById('content-description').textContent = appData.currentContent.description || '';
             document.getElementById('content-text').innerHTML = `<pre>${escapeHtml(content.text || '')}</pre>`;
-
             const filesList = document.getElementById('content-files');
             filesList.innerHTML = '';
 
             if (content.files && content.files.length > 0) {
+                const template = document.getElementById('tmpl-decrypted-file');
                 content.files.forEach(file => {
-                    const li = document.createElement('li');
                     const blob = contentManager.base64ToBlob(file.data, file.type);
                     const url = URL.createObjectURL(blob);
 
-                    li.innerHTML = `
-                        <a href="${url}" download="${escapeHtml(file.name)}" target="_blank">
-                            ${escapeHtml(file.name)} (${file.type})
-                        </a>
-                    `;
-                    filesList.appendChild(li);
+                    const clone = template.content.cloneNode(true);
+                    const link = clone.querySelector('.file-list-item');
+                    link.href = url;
+                    link.download = file.name;
+                    clone.querySelector('.file-name').textContent = file.name;
+                    clone.querySelector('.file-meta').textContent = file.type || 'unknown type';
+                    
+                    filesList.appendChild(clone);
                 });
             } else {
-                filesList.innerHTML = '<li>No files attached</li>';
+                filesList.innerHTML = '<li>' + ui.t('decrypt.noFiles') + '</li>';
+            }
+            
+            // Show recovered keys if available
+            const recoveredKeysContainer = document.getElementById('recovered-keys-container');
+            if (recoveredKeysContainer) {
+                 recoveredKeysContainer.innerHTML = ''; // Clear previous
+                 if (content.shares && content.shares.length > 0) {
+                     const details = document.createElement('details');
+                     details.className = 'keys-details';
+                     
+                     const summary = document.createElement('summary');
+                     summary.className = 'keys-summary';
+                     summary.textContent = ui.t('decrypt.viewKeys');
+                     details.appendChild(summary);
+                     
+                     const list = document.createElement('div');
+                     list.className = 'recovered-keys-list';
+                     
+                     // Try to map names if available
+                     const names = appData.currentContent.shareNames || [];
+                     
+                     const templateKey = document.getElementById('tmpl-recovered-key');
+                     
+                     content.shares.forEach((share, index) => {
+                         const name = names[index] || `Person ${index+1}`;
+                         
+                         const clone = templateKey.content.cloneNode(true);
+                         clone.querySelector('.share-index').textContent = `#${index+1}`;
+                         clone.querySelector('.share-name').textContent = name;
+                         clone.querySelector('.share-value').textContent = share;
+                         
+                         const copyBtn = clone.querySelector('.share-copy-btn');
+                         copyBtn.onclick = function() {
+                             navigator.clipboard.writeText(share);
+                             const original = this.innerText;
+                             this.innerText = ui.t('common.copied');
+                             setTimeout(() => this.innerText = original, 2000);
+                         };
+                         
+                         list.appendChild(clone);
+                     });
+                     
+                     details.appendChild(list);
+                     recoveredKeysContainer.appendChild(details);
+                 }
             }
         }
 
         // Admin functions
         function showAdminView() {
-            ui.showView('admin-view');
-            showAdminList();
+            ui.showView('admin-dashboard-view');
+            // Ensure appData.settings is initialized
+            if (!appData.settings) appData.settings = { greeting: '' };
+
+            // Initialize vault session if not present
+            if (!appData.vaultSession) appData.vaultSession = {};
+            
+            // Set global greeting value
+            const greetingInput = document.getElementById('global-greeting-input');
+            if (greetingInput) greetingInput.value = appData.settings.greeting || '';
+            
+            renderDashboard();
         }
+        
+        function renderDashboard() {
+            const grid = document.getElementById('dashboard-vaults-grid');
+            if (!grid) return;
+            
+            // Toggle visibility of Unlock All button - show only when some vaults are locked
+            const unlockBtn = document.getElementById('btn-unlock-all');
+            if (unlockBtn) {
+                const hasVaults = appData.contents && appData.contents.length > 0;
+                const hasLockedVaults = hasVaults && appData.contents.some(c => !appData.vaultSession?.[c.id]?.masterKey);
+                
+                if (hasLockedVaults) {
+                    unlockBtn.classList.remove('hidden');
+                } else {
+                    unlockBtn.classList.add('hidden');
+                }
+            }
+
+            // Keep the "Add New" card (first child)
+            const addCard = grid.firstElementChild;
+            grid.innerHTML = '';
+            
+            // Only show "Add New" if serving via HTTP/HTTPS
+            const isSecureOrigin = window.location.protocol === 'http:' || window.location.protocol === 'https:';
+            if (isSecureOrigin) {
+                grid.appendChild(addCard);
+            }
+            
+            const vaultCardTemplate = document.getElementById('tmpl-vault-card');
+            appData.contents.forEach((content) => {
+                const clone = vaultCardTemplate.content.cloneNode(true);
+                const card = clone.querySelector('.vault-card');
+                card.onclick = () => openVaultEditor(content.id);
+                
+                const shareCount = content.totalShares || 0;
+                const reqCount = content.requiredShares || 0;
+                const people = content.shareNames ? content.shareNames.join(', ') : ui.t('admin.noOwners');
+                
+                clone.querySelector('.vault-card-badge').textContent = `${reqCount}/${shareCount} ${ui.t('admin.sharesBadge')}`;
+                clone.querySelector('.vault-card-title').textContent = content.name || 'Untitled Vault';
+                clone.querySelector('.vault-card-desc').textContent = content.description || 'No description';
+                clone.querySelector('.vault-card-owners').textContent = people.substring(0, 40) + (people.length > 40 ? '...' : '');
+                
+                grid.appendChild(clone);
+            });
+            
+            // Update Distribution Center
+            renderDistributionCenter();
+        }
+
+        function updateGlobalGreeting(val) {
+             appData.settings.greeting = val;
+             renderDistributionCenter();
+        }
+        
+
+        
+        async function unlockAllVaults() {
+             // Identify locked vaults
+             const locked = appData.contents.filter(c => !appData.vaultSession?.[c.id]?.masterKey);
+             
+             if (locked.length === 0 && appData.contents.length > 0) {
+                 if (!confirm(ui.t('confirm.alreadyUnlocked'))) {
+                     return;
+                 }
+             }
+             
+             if (appData.contents.length === 0) {
+                 alert("No vaults to unlock.");
+                 return;
+             }
+             
+             
+             // Create temporary full-screen overlay for bulk key entry
+             
+             const overlay = document.createElement('div');
+             overlay.id = 'bulk-unlock-overlay';
+             overlay.className = 'bulk-unlock-overlay';
+             
+             const card = document.createElement('div');
+             card.className = 'card bulk-unlock-card'; // reuse card class
+
+             
+             card.innerHTML = `
+                 <h2 data-i18n="unlock.title">Enter Master Keys</h2>
+                 <p data-i18n="unlock.description">Enter the master key for each vault to generate distribution messages.</p>
+                 <div id="bulk-inputs"></div>
+                 <div class="modal-actions">
+                     <button class="btn btn-secondary" id="btn-cancel-bulk" data-i18n="common.cancel">Cancel</button>
+                     <button class="btn" id="btn-save-bulk" data-i18n="unlock.confirm">Unlock All</button>
+                 </div>
+             `;
+             ui.applyI18n(card);
+             
+             const inputsContainer = card.querySelector('#bulk-inputs');
+             
+             appData.contents.forEach(content => {
+                 const row = document.createElement('div');
+                 row.className = 'unlock-input-row';
+                 
+                 const label = document.createElement('label');
+                 label.textContent = content.name;
+                 
+                 const input = document.createElement('input');
+                 input.type = 'text';
+                 input.value = appData.vaultSession?.[content.id]?.masterKey || '';
+                 input.setAttribute('data-i18n', 'unlock.placeholder');
+                 input.placeholder = 'Enter Master Key';
+                 input.dataset.id = content.id;
+                 
+                 row.appendChild(label);
+                 row.appendChild(input);
+                 inputsContainer.appendChild(row);
+             });
+             
+             overlay.appendChild(card);
+             document.body.appendChild(overlay);
+             
+             // Handlers
+             document.getElementById('btn-cancel-bulk').onclick = () => {
+                 document.body.removeChild(overlay);
+             };
+             
+             document.getElementById('btn-save-bulk').onclick = async () => {
+                 const inputs = inputsContainer.querySelectorAll('input');
+                 if (!appData.vaultSession) appData.vaultSession = {};
+                 
+                 // Decrypt each vault to cache shares
+                 for (const inp of inputs) {
+                     const val = inp.value.trim();
+                     const contentId = inp.dataset.id;
+                     if (val) {
+                         const content = appData.contents.find(c => c.id === contentId);
+                         if (content) {
+                             try {
+                                 const decrypted = await contentManager.decryptContent(content.encryptedData, val);
+                                 appData.vaultSession[contentId] = {
+                                     masterKey: val,
+                                     shares: decrypted.shares || []
+                                 };
+                             } catch (e) {
+                                 // Invalid key - still store master key, shares will be empty
+                                 if (!appData.vaultSession[contentId]) {
+                                     appData.vaultSession[contentId] = {};
+                                 }
+                                 appData.vaultSession[contentId].masterKey = val;
+                                 console.log('Could not decrypt vault ' + contentId + ': ' + e);
+                             }
+                         }
+                     }
+                 }
+                 
+                 renderDashboard();
+                 renderDistributionCenter();
+                 document.body.removeChild(overlay);
+             };
+        }
+        
+
 
         function exitAdmin() {
             appData.isAdmin = false;
@@ -799,91 +1978,57 @@
             showMainView();
         }
 
-        function showAdminList() {
-            document.getElementById('admin-editor').classList.add('hidden');
-            document.getElementById('admin-list').classList.remove('hidden');
-            renderAdminContentList();
-        }
 
-        function renderAdminContentList() {
-            const container = document.getElementById('admin-content-list');
-
-            if (appData.contents.length === 0) {
-                container.innerHTML = '<p>No content created yet.</p>';
-                return;
-            }
-
-            container.innerHTML = appData.contents.map(content => `
-                <div class="content-item">
-                    <h3>${escapeHtml(content.name)}</h3>
-                    <div class="content-meta">
-                        ${content.requiredShares} of ${content.totalShares} passwords required
-                    </div>
-                    <p>${escapeHtml(content.description)}</p>
-                    <button class="btn" onclick="editContent('${content.id}')">Edit</button>
-                    <button class="btn btn-danger" onclick="deleteContent('${content.id}')">Delete</button>
-                </div>
-            `).join('');
-        }
-
-        function showCreateContent() {
-            appData.workingContent = {
-                id: null,  // null means new content
-                name: '',
-                description: '',
-                totalShares: 5,
-                requiredShares: 3,
-                text: '',
-                files: [],  // Always start with empty files array
-                masterKey: null
-            };
-
-            document.getElementById('admin-list').classList.add('hidden');
-            document.getElementById('admin-editor').classList.remove('hidden');
-            document.getElementById('editor-title').textContent = 'Create New Content';
-
-            populateEditor();
-            showEditorStep(1);
-        }
 
         function populateEditor() {
+            // Legacy function - elements may not exist
             if (!appData.workingContent) return;
+            
+            const editName = document.getElementById('edit-name');
+            const editDesc = document.getElementById('edit-description');
+            const editTotal = document.getElementById('edit-total-shares');
+            const editReq = document.getElementById('edit-required-shares');
+            const editText = document.getElementById('edit-text');
+            const fileInput = document.getElementById('file-input');
+            const saveBtn = document.getElementById('btn-save-content');
+            const saveError = document.getElementById('save-error-message');
+            
+            // Skip if legacy elements don't exist
+            if (!editName) return;
 
-            // Populate basic information
-            document.getElementById('edit-name').value = appData.workingContent.name || '';
-            document.getElementById('edit-description').value = appData.workingContent.description || '';
-            document.getElementById('edit-total-shares').value = appData.workingContent.totalShares || 5;
-            document.getElementById('edit-required-shares').value = appData.workingContent.requiredShares || 3;
-            document.getElementById('edit-text').value = appData.workingContent.text || '';
+            editName.value = appData.workingContent.name || '';
+            if (editDesc) editDesc.value = appData.workingContent.description || '';
+            if (editTotal) editTotal.value = appData.workingContent.totalShares || 5;
+            if (editReq) editReq.value = appData.workingContent.requiredShares || 3;
+            if (editText) editText.value = appData.workingContent.text || '';
 
-            // Test Helper Hook
-            TestHelper.prefillCreation();
 
-            // Clear file input and preview existing files
-            document.getElementById('file-input').value = '';
+
+            if (fileInput) fileInput.value = '';
             updateFilePreview(appData.workingContent.files || []);
 
             ui.clearMessages();
             
-            // Check if we can save
-            const saveBtn = document.getElementById('btn-save-content');
-            const saveError = document.getElementById('save-error-message');
-            
             if (!initialHTML) {
-                saveBtn.classList.add('hidden');
-                saveError.classList.remove('hidden');
+                if (saveBtn) saveBtn.classList.add('hidden');
+                if (saveError) saveError.classList.remove('hidden');
             } else {
-                saveBtn.classList.remove('hidden');
-                saveError.classList.add('hidden');
+                if (saveBtn) saveBtn.classList.remove('hidden');
+                if (saveError) saveError.classList.add('hidden');
             }
         }
 
-        async function editContent(contentId) {
+        async function editContent(contentId, providedKey = null) {
             const content = appData.contents.find(c => c.id === contentId);
-            if (!content) return;
+            if (!content) return false;
 
-            const masterKey = prompt('Enter master key to edit this content:');
-            if (!masterKey) return;
+            let masterKey = providedKey || appData.vaultSession?.[contentId]?.masterKey;
+            if (!masterKey) {
+                 masterKey = prompt(ui.t('prompt.enterMasterKey'));
+            }
+            if (!masterKey) return false; // Cancelled
+            
+            // Attempt to decrypt with the provided key
 
             try {
                 // Decrypt existing content
@@ -898,65 +2043,67 @@
                     requiredShares: content.requiredShares,
                     text: decryptedContent.text || '',
                     files: decryptedContent.files || [],
-                    masterKey: masterKey
+                    masterKey: masterKey,
+                    shareNames: content.shareNames || [],
+                    shares: decryptedContent.shares || [] // Recover original shares if available
                 };
 
-                document.getElementById('admin-list').classList.add('hidden');
-                document.getElementById('admin-editor').classList.remove('hidden');
-                document.getElementById('editor-title').textContent = 'Edit Content';
-
-                populateEditor();
-                showEditorStep(3); // Skip to content step for editing
+                // Cache the vault session (master key + shares)
+                if (!appData.vaultSession) appData.vaultSession = {};
+                appData.vaultSession[contentId] = {
+                    masterKey: masterKey,
+                    shares: decryptedContent.shares || []
+                };
+                
+                return true; // Success
 
             } catch (error) {
                 console.log('Invalid master key or corrupted content ' + error);
-                alert('Invalid master key or corrupted content');
+                alert(ui.t('error.invalidMasterKey'));
             }
         }
 
         function updateFilePreview(existingFiles = []) {
+            // Legacy function - elements may not exist
             const preview = document.getElementById('file-preview');
+            if (!preview) return;
             preview.innerHTML = '';
 
             if (existingFiles.length > 0) {
                 const existingFilesList = document.createElement('div');
                 existingFilesList.innerHTML = '<h4>Attached Files:</h4>';
+                
+                const template = document.getElementById('tmpl-file-preview');
 
                 existingFiles.forEach((file, index) => {
-                    const fileItem = document.createElement('div');
-                    fileItem.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid #eee;';
-
-                    let downloadLink = '';
-                    try {
-                        // Create a preview link if possible
-                        // Note: For very large files this might be heavy, but we have the data in memory anyway
-                        const blob = contentManager.base64ToBlob(file.data, file.type || 'application/octet-stream');
-                        const url = URL.createObjectURL(blob);
-                        downloadLink = `<a href="${url}" download="${escapeHtml(file.name)}" target="_blank" style="margin-right: 10px; font-size: 12px;">Download</a>`;
-
-                        // Clean up object URLs when we rebuild the list? 
-                        // We rely on the fact that this is a single page app re-rendering. 
-                        // Ideally we should revoke old URLs.
-                        // But for a simple fix, this is acceptable.
-                    } catch (e) {
-                        console.warn('Could not create preview link', e);
+                    const clone = template.content.cloneNode(true);
+                    
+                    clone.querySelector('.file-name-type').innerHTML = `• ${escapeHtml(file.name)} <small>(${file.type || 'unknown'})</small>`;
+                    
+                    const badge = clone.querySelector('.file-badge');
+                    if (file.isNew) {
+                         badge.className = 'badge-available';
+                         badge.textContent = 'New';
+                    } else {
+                         badge.className = 'badge-pending';
+                         badge.textContent = 'Existing';
                     }
 
-                    const badge = file.isNew
-                        ? '<span class="badge badge-success" style="background: #28a745; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; margin-left: 5px;">New</span>'
-                        : '<span class="badge badge-secondary" style="background: #6c757d; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; margin-left: 5px;">Existing</span>';
+                    const downloadLink = clone.querySelector('.file-download-link');
+                    try {
+                        const blob = contentManager.base64ToBlob(file.data, file.type || 'application/octet-stream');
+                        const url = URL.createObjectURL(blob);
+                        downloadLink.href = url;
+                        downloadLink.download = file.name;
+                    } catch (e) {
+                         console.warn('Could not create preview link', e);
+                         downloadLink.style.display = 'none';
+                    }
 
-                    fileItem.innerHTML = `
-                        <div style="display: flex; align-items: center;">
-                            <span>• ${escapeHtml(file.name)} <small>(${file.type || 'unknown'})</small></span>
-                            ${badge}
-                        </div>
-                        <div>
-                            ${downloadLink}
-                            <button type="button" class="btn btn-danger" style="padding: 4px 8px; font-size: 12px; margin-bottom: 0;" onclick="removeExistingFile(${index})">Remove</button>
-                        </div>
-                    `;
-                    existingFilesList.appendChild(fileItem);
+                    const removeBtn = clone.querySelector('.file-remove-btn');
+                    removeBtn.onclick = () => removeExistingFile(index);
+
+                    existingFilesList.appendChild(clone);
                 });
 
                 preview.appendChild(existingFilesList);
@@ -971,200 +2118,9 @@
         }
 
 
-        function deleteContent(contentId) {
-            if (confirm('Are you sure you want to delete this content?')) {
-                appData.contents = appData.contents.filter(c => c.id !== contentId);
-                renderAdminContentList();
-            }
-        }
 
-        function resetEditor() {
-            document.getElementById('edit-name').value = '';
-            document.getElementById('edit-description').value = '';
-            document.getElementById('edit-total-shares').value = '5';
-            document.getElementById('edit-required-shares').value = '3';
-            document.getElementById('edit-text').value = '';
-            document.getElementById('file-input').value = '';
-            document.getElementById('file-preview').innerHTML = '';
-            appData.editingFiles = null;
-            ui.clearMessages();
-        }
 
-        function showEditorStep(step) {
-            document.querySelectorAll('.editor-step').forEach(s => s.classList.add('hidden'));
-            document.getElementById(`step${step}`).classList.remove('hidden');
-        }
 
-        function generateShares() {
-            try {
-                const totalShares = parseInt(document.getElementById('edit-total-shares').value);
-                const requiredShares = parseInt(document.getElementById('edit-required-shares').value);
-
-                if (totalShares < 2 || requiredShares < 2 || requiredShares > totalShares) {
-                    throw new Error('Invalid share configuration');
-                }
-
-                const result = contentManager.generateShares(totalShares, requiredShares);
-
-                // Update working content
-                if (appData.workingContent) {
-                    appData.workingContent.masterKey = result.key;
-                }
-
-                document.getElementById('master-key').value = result.key;
-
-                const sharesList = document.getElementById('shares-list');
-                sharesList.innerHTML = result.shares.map((share, index) => `
-                    <div class="form-group">
-                        <label>Share ${index + 1} (give to person ${index + 1}):</label>
-                        <input type="text" value="${share}" readonly onclick="this.select()">
-                    </div>
-                `).join('');
-
-                appData.currentShares = result;
-
-                // Test Helper Hook
-                TestHelper.cacheShares(result.shares);
-
-                showEditorStep(2);
-
-            } catch (error) {
-                console.log('Error: ' + error);
-                ui.showError(error.message);
-            }
-        }
-
-        function proceedToContent() {
-            showEditorStep(3);
-        }
-
-        async function saveContent() {
-            try {
-                const working = appData.workingContent;
-                if (!working) throw new Error('No content being worked on');
-
-                // Update working content from form
-                working.name = document.getElementById('edit-name').value.trim();
-                working.description = document.getElementById('edit-description').value.trim();
-                working.text = document.getElementById('edit-text').value;
-
-                if (!working.name || !working.description) {
-                    throw new Error('Please fill in all required fields');
-                }
-
-                // Nothing to do for files.  They are already in working.files.
-
-                // Prepare content to encrypt
-                // Prepare content to encrypt (strip transient UI state like isNew)
-                const contentToEncrypt = {
-                    text: working.text,
-                    files: (working.files || []).map(f => {
-                        const { isNew, ...rest } = f;
-                        return rest;
-                    })
-                };
-
-                // Get encryption key
-                const encryptionKey = working.masterKey ||
-                    (appData.currentShares ? appData.currentShares.key : null);
-
-                if (!encryptionKey) {
-                    throw new Error('No encryption key available. Please generate shares first.');
-                }
-
-                const encryptedData = await contentManager.encryptContent(contentToEncrypt, encryptionKey);
-
-                // Create content item
-                const contentItem = {
-                    id: working.id || generateId(),  // Use existing ID or generate new one
-                    name: working.name,
-                    description: working.description,
-                    totalShares: parseInt(document.getElementById('edit-total-shares').value),
-                    requiredShares: parseInt(document.getElementById('edit-required-shares').value),
-                    encryptedData: encryptedData,
-                    shares: appData.currentShares ? appData.currentShares.shares : [],
-                    created: new Date().toISOString()
-                };
-
-                if (working.id) {
-                    // Update existing content
-                    const index = appData.contents.findIndex(c => c.id === working.id);
-                    appData.contents[index] = contentItem;
-                } else {
-                    // Add new content
-                    appData.contents.push(contentItem);
-                }
-
-                // Clear working state
-                appData.workingContent = null;
-                appData.currentShares = null;
-
-                // Clear working state
-                appData.workingContent = null;
-                appData.currentShares = null;
-
-                generateUpdatedFile();
-                ui.showSuccess('Content saved successfully!');
-
-                setTimeout(() => {
-                    showAdminList();
-                }, 1500);
-
-            } catch (error) {
-                console.log('Error: ' + error);
-                ui.showError(error.message);
-            }
-        }
-
-        function cancelEdit() {
-            appData.workingContent = null;
-            appData.currentShares = null;
-            showAdminList();
-        }
-
-        // File preview
-        document.getElementById('file-input').addEventListener('change', async function (e) {
-            if (appData.workingContent) {
-                if (e.target.files.length === 0) return;
-
-                // Process each file and add to working content
-                const filePromises = Array.from(e.target.files).map(async file => {
-                    try {
-                        const base64Data = await contentManager.fileToBase64(file);
-                        return {
-                            name: file.name,
-                            type: file.type,
-                            size: file.size,
-                            data: base64Data,
-                            isNew: true
-                        };
-                    } catch (err) {
-                        console.error("Error reading file", file.name, err);
-                        ui.showError(`Failed to read file ${file.name}`);
-                        return null;
-                    }
-                });
-
-                const processedFiles = (await Promise.all(filePromises)).filter(f => f !== null);
-
-                // Initialize files array if it doesn't exist
-                if (!appData.workingContent.files) {
-                    appData.workingContent.files = [];
-                }
-
-                // Add new files to existing files
-                appData.workingContent.files = [
-                    ...appData.workingContent.files,
-                    ...processedFiles
-                ];
-
-                // Update the preview
-                updateFilePreview(appData.workingContent.files);
-
-                // Clear the input so the same file can be selected again if needed
-                e.target.value = '';
-            }
-        });
 
         // Utility functions
         function generateId() {
@@ -1178,6 +2134,14 @@
         }
 
         // Generate updated file with embedded data
+        async function downloadSecureFile() {
+             if (appData.contents.length === 0) {
+                 ui.showError(ui.t('error.noContent'));
+                 return;
+             }
+             await generateUpdatedFile();
+        }
+
         function generateUpdatedFile() {
             // Use the fetched HTML which preserves formatting
             let htmlContent = initialHTML;
@@ -1186,7 +2150,12 @@
             htmlContent = htmlContent.replace(/<script[^>]*id="embedded-data"[^>]*>[\s\S]*?<\/script>/i, '');
 
             // Create new embedded data script with proper indentation
-            const indentedJson = JSON.stringify(appData.contents, null, 4)
+            const dataToSave = {
+                contents: appData.contents,
+                settings: appData.settings
+            };
+            
+            const indentedJson = JSON.stringify(dataToSave, null, 4)
                 .split('\n')
                 .map(line => line ? '        ' + line : line) // Add 8 spaces for proper HTML indentation
                 .join('\n');
@@ -1212,15 +2181,31 @@ ${indentedJson}
             document.body.removeChild(a);
             setTimeout(() => URL.revokeObjectURL(url), 100);
 
-            ui.showSuccess('Updated file generated and downloaded!');
+            ui.showSuccess(ui.t('success.generated'));
         }
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', init);
 
         // Handle hash changes
+        // Check for HTTP/HTTPS protocol
+        const isSecureOrigin = window.location.protocol === 'http:' || window.location.protocol === 'https:';
+        
+        // Hide "Create New Vault" button if not secure
+        if (!isSecureOrigin) {
+            const createBtn = document.getElementById('main-create-btn');
+            if (createBtn) createBtn.style.display = 'none';
+        }
+
+        // Handle hash changes
         window.addEventListener('hashchange', function () {
             if (window.location.hash === '#admin') {
+                if (!isSecureOrigin) {
+                    alert(ui.t('error.adminHttps') + '\n\n' + 'Please run a local server (e.g., "python3 -m http.server") to create or edit instructions.');
+                    window.location.hash = ''; // Reset
+                    return;
+                }
+                
                 if (!appData.isAdmin) {
                     appData.isAdmin = true;
                     showAdminView();
@@ -1232,6 +2217,21 @@ ${indentedJson}
                 }
             }
         });
+        
+        // Initial Hash Check
+        if (window.location.hash === '#admin') {
+             if (!isSecureOrigin) {
+                 setTimeout(() => {
+                     alert(ui.t('error.adminHttps') + '\n\n' + 'Please run a local server (e.g., "python3 -m http.server") to create or edit instructions.');
+                     window.location.hash = '';
+                 }, 100);
+             } else {
+                 if (!appData.isAdmin) {
+                    appData.isAdmin = true;
+                    showAdminView();
+                 }
+             }
+        }
 
         // Prevent form submission on enter in password fields
         document.addEventListener('keypress', function (e) {
@@ -1243,21 +2243,510 @@ ${indentedJson}
             }
         });
 
+
+        // Modal Logic - variables must be declared before exports
+        let currentModalVaultId = null;
+        let currentModalFiles = [];
+
         // Export functions to global scope for onclick handlers
         window.showMainView = showMainView;
         window.startDecryption = startDecryption;
         window.attemptDecryption = attemptDecryption;
-        window.showAdminList = showAdminList;
-        window.showCreateContent = showCreateContent;
+        // window.showAdminList = showAdminList;
+        // window.showCreateContent = showCreateContent;
         window.editContent = editContent;
-        window.deleteContent = deleteContent;
-        window.generateShares = generateShares;
-        window.proceedToContent = proceedToContent;
-        window.saveContent = saveContent;
-        window.cancelEdit = cancelEdit;
+        // window.deleteContent = deleteContent;
+        // window.generateShares = generateShares;
+        // window.proceedToContent = proceedToContent;
+        // window.saveContent = saveContent;
         window.exitAdmin = exitAdmin;
         window.removeExistingFile = removeExistingFile;
+        // window.showSettings = showSettings;
+        // window.saveSettings = saveSettings;
+        window.openVaultEditor = openVaultEditor;
+        window.closeVaultModal = closeVaultModal;
+        window.renderShareTable = renderShareTable;
+        window.saveVaultFromModal = saveVaultFromModal;
+        window.deleteVaultFromModal = deleteVaultFromModal;
+        window.handleModalFiles = handleModalFiles;
+        window.updateGlobalGreeting = updateGlobalGreeting;
+
+        function openVaultEditor(id = null) {
+            currentModalVaultId = id;
+            const modal = document.getElementById('vault-modal');
+            modal.classList.remove('hidden');
+            const modalTitle =document.getElementById('modal-title');
+            
+            // Reset fields
+            currentModalFiles = [];
+            document.getElementById('modal-file-list').innerHTML = '';
+            document.getElementById('modal-file-input').value = '';
+            
+            if (id) {
+                // Edit Mode
+                modalTitle.setAttribute('data-i18n', 'editor.titleEdit');
+                ui.applyI18n(modal); // Update title text immediately
+
+                const content = appData.contents.find(c => c.id === id);
+                if (!content) return closeVaultModal();
+                
+                // Populate metadata fields from stored content
+                document.getElementById('modal-vault-name').value = content.name;
+                document.getElementById('modal-vault-desc').value = content.description;
+                document.getElementById('modal-total-shares').value = content.totalShares;
+                document.getElementById('modal-required-shares').value = content.requiredShares;
+                
+                // Try to get master key from vault session cache
+                let cachedKey = appData.vaultSession?.[id]?.masterKey;
+                
+                let promise = editContent(id, cachedKey);
+                
+                promise.then((success) => {
+                    if (!success) {
+                        // User cancelled or failed. Do not open modal.
+                        return; 
+                    }
+                    
+                    document.getElementById('vault-modal').classList.remove('hidden');
+
+                    // Populate modal from appData.workingContent
+                    if (appData.workingContent) {
+                         const wc = appData.workingContent;
+                         document.getElementById('modal-vault-name').value = wc.name;
+                         document.getElementById('modal-vault-desc').value = wc.description;
+                         document.getElementById('modal-vault-text').value = wc.text;
+                         document.getElementById('modal-total-shares').value = wc.totalShares;
+                         document.getElementById('modal-required-shares').value = wc.requiredShares;
+                         document.getElementById('modal-master-key').value = wc.masterKey;
+                         
+                         // Helper: Restore file list
+                         currentModalFiles = wc.files || [];
+                         const list = document.getElementById('modal-file-list');
+                         list.innerHTML = '';
+                         currentModalFiles.forEach(f => {
+                             const li = document.createElement('li');
+                             const size = Math.round(f.data.length * 0.75 / 1024);
+                             const dataUrl = `data:${f.type};base64,${f.data}`;
+                             li.innerHTML = `
+                                <a href="${dataUrl}" download="${f.name}" class="file-list-item" target="_blank">
+                                    <div class="file-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                                    </div>
+                                    <div class="file-info">
+                                        <span class="file-name">${f.name}</span>
+                                        <span class="file-meta">${size} KB</span>
+                                    </div>
+                                    <span class="modal-file-remove" onclick="event.preventDefault(); event.stopPropagation(); this.closest('li').remove();">×</span>
+                                </a>
+                             `;
+                             list.appendChild(li);
+                         });
+
+                         // Use shares from vault session (already cached by editContent)
+                         const sharesToDisplay = appData.vaultSession?.[id]?.shares || wc.shares || [];
+                         
+                         renderShareTable(false, wc.shareNames, sharesToDisplay); 
+                    }
+                });
+                
+            } else {
+                // New Vault
+                modalTitle.setAttribute('data-i18n', 'editor.titleNew');
+                ui.applyI18n(modal);
+
+                document.getElementById('vault-modal').classList.remove('hidden');
+                document.getElementById('modal-vault-name').value = '';
+                document.getElementById('modal-vault-desc').value = '';
+                document.getElementById('modal-vault-text').value = '';
+                document.getElementById('modal-total-shares').value = 3;
+                document.getElementById('modal-required-shares').value = 2;
+                document.getElementById('modal-file-list').innerHTML = '';
+                currentModalFiles = [];
+                renderShareTable(true); // Generate new keys
+            }
+            
+            // Populate Autocomplete
+            const datalist = document.getElementById('all-share-names');
+            datalist.innerHTML = '';
+            const allNames = new Set();
+            appData.contents.forEach(c => {
+                if (c.shareNames) c.shareNames.forEach(n => { if(n) allNames.add(n) });
+            });
+            allNames.forEach(name => {
+                const opt = document.createElement('option');
+                opt.value = name;
+                datalist.appendChild(opt);
+            });
+        }
+        
+        function closeVaultModal() {
+            document.getElementById('vault-modal').classList.add('hidden');
+        }
+        
+        function renderShareTable(generateNew = false, existingNames = [], existingShares = null) {
+             const total = parseInt(document.getElementById('modal-total-shares').value);
+             const container = document.getElementById('modal-share-table');
+             
+             let shares = [];
+             let masterKey = document.getElementById('modal-master-key').value;
+             
+             if (generateNew || (!masterKey && !existingShares)) {
+                 const req = parseInt(document.getElementById('modal-required-shares').value);
+                 try {
+                    const result = contentManager.generateShares(total, req);
+                    shares = result.shares;
+                    masterKey = result.key;
+                    document.getElementById('modal-master-key').value = masterKey;
+                 } catch(e) { console.error(e); }
+             } else {
+                 if (existingShares && existingShares.length === total) {
+                     shares = existingShares;
+                 } else {
+                     // Display placeholder dots when shares aren't available
+                     shares = new Array(total).fill('••••••••••••••••••••••••••••');
+                 }
+             }
+             
+
+             
+             container.innerHTML = '';
+             const wrapper = document.createElement('div');
+             wrapper.className = 'share-table-wrapper';
+             
+             const template = document.getElementById('tmpl-share-row-modal');
+
+             for(let i=0; i<total; i++) {
+                 const name = existingNames[i] || ''; // Try to match existing name
+                 
+                 const clone = template.content.cloneNode(true);
+                 ui.applyI18n(clone);
+                 clone.querySelector('.share-index').textContent = `#${i+1}`;
+                 
+                 const nameInput = clone.querySelector('.share-name-input-modal');
+                 nameInput.value = name;
+                 
+                 const shareInput = clone.querySelector('.share-value-input');
+                 shareInput.value = shares[i];
+                 
+                 const copyBtn = clone.querySelector('.share-copy-btn');
+                 // Closure to capture shareInput
+                 copyBtn.onclick = function() {
+                      navigator.clipboard.writeText(shareInput.value);
+                      const originalText = this.innerText;
+                      this.innerText = ui.t('common.copied');
+                      setTimeout(() => this.innerText = originalText, 2000);
+                 };
+
+                 wrapper.appendChild(clone);
+             }
+             container.appendChild(wrapper);
+        }
+
+        async function saveVaultFromModal() {
+             const name = document.getElementById('modal-vault-name').value;
+             const desc = document.getElementById('modal-vault-desc').value;
+             const text = document.getElementById('modal-vault-text').value;
+             const total = parseInt(document.getElementById('modal-total-shares').value);
+             const req = parseInt(document.getElementById('modal-required-shares').value);
+             const masterKey = document.getElementById('modal-master-key').value;
+             
+             if (!name || !text) { alert(ui.t('error.nameRequired')); return; }
+             
+             // Collect Names
+             const inputs = document.querySelectorAll('.share-name-input-modal');
+             const shareNames = Array.from(inputs).map(i => i.value.trim());
+             
+             // Collect Shares (read from DOM inputs)
+             const inputsShares = document.querySelectorAll('#modal-share-table input[readonly]');
+             const currentShares = Array.from(inputsShares).map(i => i.value);
+             const hasDots = currentShares.some(s => s.includes('••••'));
+             
+             // Get valid shares: either from DOM or from existing vaultSession
+             let sharesToEncrypt = [];
+             if (!hasDots) {
+                 sharesToEncrypt = currentShares;
+             } else if (appData.vaultSession?.[currentModalVaultId]?.shares) {
+                 sharesToEncrypt = appData.vaultSession[currentModalVaultId].shares;
+             }
+             
+             // Encrypt (including shares for recovery)
+             const contentToEncrypt = { text, files: currentModalFiles, shares: sharesToEncrypt };
+             const encryptedData = await contentManager.encryptContent(contentToEncrypt, masterKey);
+             
+             // Create Object
+             const vault = {
+                 id: currentModalVaultId || generateId(),
+                 name,
+                 description: desc,
+                 totalShares: total,
+                 requiredShares: req,
+                 encryptedData: encryptedData,
+                 shareNames: shareNames,
+                 created: new Date().toISOString()
+             };
+             
+             // Cache vault session state (master key + shares)
+             if (!appData.vaultSession) appData.vaultSession = {};
+             if (!hasDots) {
+                 appData.vaultSession[vault.id] = {
+                     masterKey: masterKey,
+                     shares: currentShares
+                 };
+             } else if (appData.vaultSession[vault.id]) {
+                 appData.vaultSession[vault.id].masterKey = masterKey;
+             }
+             
+             // Save to AppData
+             if (currentModalVaultId) {
+                 const idx = appData.contents.findIndex(c => c.id === currentModalVaultId);
+                 appData.contents[idx] = vault;
+             } else {
+                 appData.contents.push(vault);
+             }
+             
+             closeVaultModal();
+             renderDashboard();
+        }
+        
+        function deleteVaultFromModal() {
+            if (currentModalVaultId && confirm(ui.t('confirm.deleteVault'))) {
+                appData.contents = appData.contents.filter(c => c.id !== currentModalVaultId);
+                closeVaultModal();
+                renderDashboard();
+            }
+        }
+        
+        function renderDistributionCenter() {
+             const container = document.getElementById('distribution-center-list');
+             if (!container) return;
+             
+             // Get i18n texts FIRST (before any usage)
+             const lang = ui.currentLang;
+             const texts = i18n[lang] || i18n['en'];
+             
+             // Aggregate data by person
+             const personMap = {}; // Name -> { items: [{ vaultName, key }] }
+             
+             appData.contents.forEach(vault => {
+                 const shares = appData.vaultSession?.[vault.id]?.shares;
+                 if (!shares) return; // Only show if we have session shares (i.e. created/edited this session)
+                 
+                 vault.shareNames.forEach((name, index) => {
+                     const cleanName = name.trim() || `Person ${index+1}`;
+                     if (!personMap[cleanName]) personMap[cleanName] = [];
+                     
+                     personMap[cleanName].push({
+                         vaultName: vault.name,
+                         key: shares[index] || 'Error: Key missing'
+                     });
+                 });
+             });
+             
+             // Clear existing content
+             container.innerHTML = '';
+             
+             if (Object.keys(personMap).length === 0) {
+                 container.innerHTML = `<div class="empty-state">
+                    <p>${texts['dist.noPlan']}</p>
+                    <p class="empty-state-hint">${texts['dist.createVaults']}</p>
+                 </div>`;
+                 // Don't return, still show admin keys if available
+             }
+             
+             const tmplPersonal = document.getElementById('tmpl-dist-personal');
+
+             for (const [person, items] of Object.entries(personMap)) {
+                 const keysList = items.map((item, i) => `${i+1}. "${item.vaultName}": ${item.key}`).join('\n');
+                 
+                 // Variable Expansion
+                 let greeting = appData.settings.greeting || "Here are your secure access keys.";
+                 greeting = greeting.replace(/\{names\}/g, person).replace(/\{person\}/g, person);
+                 
+                 const copyText = `${ui.t('dist.to')} ${person}\n\n${greeting}\n\n${ui.t('dist.keysIntro')}\n\n${keysList}\n\n${ui.t('dist.keepSafe')}`;
+                 
+                 const clone = tmplPersonal.content.cloneNode(true);
+                 ui.applyI18n(clone); // Apply internationalization to static elements
+                 
+                 clone.querySelector('.dist-person-name').textContent = `${texts['dist.to']} ${person}`;
+                 
+                 const copyBtn = clone.querySelector('.dist-copy-email-btn');
+                 copyBtn.onclick = function() {
+                      navigator.clipboard.writeText(copyText);
+                      const originalText = this.innerText;
+                      this.innerText = ui.t('common.copied');
+                      setTimeout(() => this.innerText = originalText, 2000);
+                 };
+                 
+                 const codeBlock = clone.querySelector('.dist-email-text');
+                 codeBlock.textContent = copyText.substring(0, 150) + '... ';
+                 const hint = document.createElement('span');
+                 hint.className = 'hint-text';
+                 hint.innerText = texts['dist.clickCopy'];
+                 codeBlock.appendChild(hint);
+                 
+                 container.appendChild(clone);
+             }
+
+             // Add Admin Master Keys Block
+             const adminKeys = [];
+             appData.contents.forEach(vault => {
+                 let key = 'Not available (Unlock first)';
+                 
+                 // Check vault session for master key
+                 if (appData.vaultSession?.[vault.id]?.masterKey) {
+                     key = appData.vaultSession[vault.id].masterKey;
+                 }
+                 
+                 adminKeys.push({ vaultName: vault.name, key: key });
+             });
+             
+             if (adminKeys.length > 0) {
+                 const keysList = adminKeys.map((item, i) => `${i+1}. "${item.vaultName}": ${item.key}`).join('\n');
+                 const copyText = `${ui.t('dist.adminKeysTitle')}\n\n${keysList}`;
+                 
+                 const tmplAdmin = document.getElementById('tmpl-dist-admin');
+                 const clone = tmplAdmin.content.cloneNode(true);
+                 ui.applyI18n(clone);
+                 
+                 const copyBtn = clone.querySelector('.dist-copy-keys-btn');
+                 copyBtn.onclick = function() {
+                      navigator.clipboard.writeText(copyText);
+                      const originalText = this.innerText;
+                      this.innerText = ui.t('common.copied');
+                      setTimeout(() => this.innerText = originalText, 2000);
+                 };
+                 
+                 clone.querySelector('.dist-keys-text').textContent = copyText;
+                 container.appendChild(clone);
+             }
+        }
+        
+        async function handleModalFiles(input) {
+            if (input.files.length === 0) return;
+            
+            const list = document.getElementById('modal-file-list');
+            
+            for (const file of input.files) {
+                try {
+                    const base64Data = await contentManager.fileToBase64(file);
+                    currentModalFiles.push({
+                        name: file.name,
+                        type: file.type,
+                        data: base64Data
+                    });
+                    
+                    const li = document.createElement('li');
+                    
+                    // Create download link logic
+                    // base64Data is RAW base64. We need to prepend data URI scheme.
+                    const dataUrl = `data:${file.type};base64,${base64Data}`;
+                    li.innerHTML = `
+                        <a href="${dataUrl}" download="${file.name}" class="file-list-item" target="_blank">
+                            <div class="file-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                            </div>
+                            <div class="file-info">
+                                <span class="file-name">${file.name}</span>
+                                <span class="file-meta">${Math.round(file.size/1024)} KB</span>
+                            </div>
+                            <span class="modal-file-remove" onclick="event.preventDefault(); event.stopPropagation(); this.closest('li').remove();">×</span>
+                        </a>
+                    `;
+                    
+                    list.appendChild(li);
+                } catch (e) {
+                    console.error(e);
+                    alert('Error adding file: ' + file.name);
+                }
+            }
+        }
+
+        // Initialize Settings if needed
+        if (!appData.settings) appData.settings = {};
     </script>
+
+    <!-- Vault Editor Modal -->
+    <div id="vault-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title" data-i18n="editor.titleEdit">Edit Vault</h2>
+                <button class="btn btn-secondary btn-icon" onclick="closeVaultModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-column-group">
+                    <!-- Step 1: Content -->
+                    <div class="form-group">
+                        <label data-i18n="editor.vaultName">Vault Name</label>
+                        <input type="text" id="modal-vault-name" data-i18n-placeholder="editor.vaultNamePlaceholder" placeholder="e.g. Bank Accounts">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="editor.vaultDesc">Description (Visible to public)</label>
+                        <input type="text" id="modal-vault-desc" data-i18n-placeholder="editor.vaultDescPlaceholder" placeholder="Details about what is inside...">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label data-i18n="editor.secretMessage">Secret Message</label>
+                            <textarea id="modal-vault-text" data-i18n="editor.secretPlaceholder" placeholder="Type your secret instructions here..."></textarea>
+                        </div>
+                        <div class="form-col">
+                            <label data-i18n="editor.files">Files (Drag & Drop or Click)</label>
+                            <div class="file-drop-zone" 
+                                 onclick="document.getElementById('modal-file-input').click()"
+                                 ondragover="event.preventDefault(); this.style.background='#f0f9ff';"
+                                 ondragleave="this.style.background='transparent';"
+                                 ondrop="event.preventDefault(); this.style.background='transparent'; handleModalFiles(event.dataTransfer);">
+                                <p class="file-drop-hint" data-i18n="editor.dropFiles">Click or Drop files here</p>
+                                <input type="file" id="modal-file-input" multiple class="hidden" onchange="handleModalFiles(this)">
+                            </div>
+                            <ul id="modal-file-list" class="file-list modal-file-list"></ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: Access & Shares -->
+                     <h3 class="access-control-title" data-i18n="editor.shareConfig">Access Control</h3>
+                     <div class="share-config-row">
+                         <div class="form-col">
+                             <label data-i18n="editor.totalShares">Total Shares (How many people?)</label>
+                             <input type="number" id="modal-total-shares" value="3" min="2" max="20" onchange="renderShareTable(true)">
+                         </div>
+                         <div class="form-col">
+                             <label data-i18n="editor.requiredShares">Required to Unlock (Threshold)</label>
+                             <input type="number" id="modal-required-shares" value="2" min="2" max="20">
+                         </div>
+                         <div class="share-config-action">
+                             <button class="btn btn-secondary" onclick="renderShareTable(true)" data-i18n="editor.regenerate">Regenerate Keys</button>
+                         </div>
+                         <div class="share-config-copy-action">
+                            <!-- Master Key Display -->
+                            <div class="master-key-group">
+                                <label class="master-key-label" data-i18n="editor.masterKey">Master Key</label>
+                                <div class="master-key-wrapper">
+                                    <input type="text" id="modal-master-key" readonly class="master-key-input" title="Master Key">
+                                    <button class="btn btn-secondary master-key-copy-btn" data-i18n="common.copy" onclick="navigator.clipboard.writeText(document.getElementById('modal-master-key').value); this.innerText=ui.t('common.copied'); setTimeout(()=>this.innerText=ui.t('common.copy'), 1500);">Copy</button>
+                                </div>
+                            </div>
+                         </div>
+                     </div>
+                     
+                     <datalist id="all-share-names"></datalist>
+                     
+                     <!-- Share Table -->
+                     <label data-i18n="editor.generatedShares">Share Holders</label>
+                     <div id="modal-share-table" class="share-table-container">
+                         <!-- Table populated by JS -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="deleteVaultFromModal()" data-i18n="editor.delete">Delete Vault</button>
+                <div class="modal-spacer"></div>
+                <button class="btn btn-secondary" onclick="closeVaultModal()" data-i18n="common.cancel">Cancel</button>
+                <button class="btn" onclick="saveVaultFromModal()" data-i18n="editor.save">Save Vault</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

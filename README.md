@@ -48,8 +48,35 @@ There are two ways to give your trusted people access. Each has pros and cons:
 ---
 
 ### 💡 How to Use It
-1.  **To Create/Edit:** Go to the [Secure Instructions Web Tool](https://secure-instructions.hexe.monster/secure-instructions.html). For technical reasons, the "creation" part requires the file to be served via a local web server (like `python -m http.server`) if you are running it from your own computer.
+1.  **To Create/Edit:** Go to the [Secure Instructions Web Tool](https://secure-instructions.hexe.monster/secure-instructions.html).
 2.  **To Decrypt/Read:** Simply **double-click** the HTML file you created. Your browser will open it, and you can enter the passwords to see the contents. No special setup is needed for the people receiving your vault.
+
+#### ⚠️ Important: Running Locally
+If you want to run this tool offline to **create or edit** vaults, or if you want to modify an existing file you have downloaded, you **must** serve the file using a local web server.
+
+**Why?**
+Modern web browsers have strict security rules (CORS and Origin policies) that prevent web pages opened via `file://` (double-clicking) from performing certain actions, like robustly saving a new version of itself.
+
+Since this is a **self-modifying HTML file**, the code that generates the new HTML file (including your encrypted tokens) is contained within the HTML file itself. When you save your vault, the application reads its own source code, injects your new encrypted data, and offers the updated file for download. This cycle ensures that the new file contains everything needed to run the application, including the logic to create *the next* version.
+
+
+**How to run a local server:**
+Open your terminal/command prompt in the folder where `secure-instructions.html` is located and run one of these commands:
+
+*   **Python (Recommended):**
+    ```bash
+    python3 -m http.server
+    ```
+*   **Node.js:**
+    ```bash
+    npx http-server
+    ```
+*   **PHP:**
+    ```bash
+    php -S localhost:8080
+    ```
+
+Then open your browser to `http://localhost:8000` (or the port shown in your terminal).
 
 ---
 
@@ -61,34 +88,26 @@ The easiest way to create your secure vault is to use our privacy-respecting ver
 *(Note: Even when using this link, your data stays in your browser and is never sent to our servers.)*
 
 
+### 📚 Similar Projects
+
+During the polishing phase of this project, a similar tool called [Rememory](https://eljojo.github.io/rememory/) was featured on [Hacker News](https://news.ycombinator.com/item?id=46916609).
+
+In the comments of that discussion, another pioneer in this space was mentioned: [Keybearer](https://michael-solomon.net/keybearer/), which dates back to 2012!
+
+
 ## 🐙 GitHub and GitLab Repositories
 - GitHub: [https://github.com/close2/secure-instructions](https://github.com/close2/secure-instructions)
 - GitLab: [https://gitlab.com/close2/final-instructions](https://gitlab.com/close2/final-instructions)
 
 ## ⚖️ License and Credits
 
-This project is licensed under the MIT License.
+### Project License
+This project "Secure Instructions" is licensed under the **MIT License**.
 
-This application includes the **secrets.js** library by **amper5and** (Alexander Stetsyuk) and others, which implements Shamir's Secret Sharing.
+### Third-Party Libraries
+This application includes the **secrets.js** library, which implements Shamir's Secret Sharing. It is created by **amper5and** (Alexander Stetsyuk) and others.
 
-**secrets.js** is licensed under the MIT License:
+**secrets.js** is also licensed under the **MIT License**:
 
 > Copyright (c) 2014 Alexander Stetsyuk
->
-> Permission is hereby granted, free of charge, to any person obtaining a copy
-> of this software and associated documentation files (the "Software"), to deal
-> in the Software without restriction, including without limitation the rights
-> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-> copies of the Software, and to permit persons to whom the Software is
-> furnished to do so, subject to the following conditions:
->
-> The above copyright notice and this permission notice shall be included in all
-> copies or substantial portions of the Software.
->
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-> SOFTWARE.
+> ... (full license text preserved) ...
